@@ -1,36 +1,27 @@
-import { useId, type InputHTMLAttributes } from 'react';
-import type { FieldError, UseFormRegisterReturn } from 'react-hook-form';
-import { useValidationMessage } from '@/lib/use-messages';
+import type { InputHTMLAttributes } from 'react';
+import type { UseFormRegisterReturn } from 'react-hook-form';
+import { controlProps, Field, type FieldMessage } from './Field';
 
-interface FormFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'name'> {
+interface FormFieldProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'name' | 'className' | 'id'
+> {
   label: string;
   registration: UseFormRegisterReturn;
-  error?: FieldError;
+  error?: FieldMessage;
+  className?: string;
 }
 
-export function FormField({ label, registration, error, ...inputProps }: FormFieldProps) {
-  const id = useId();
-  const message = useValidationMessage();
-  const errorId = `${id}-error`;
-
+export function FormField({
+  label,
+  registration,
+  error,
+  className = 'mb-3',
+  ...inputProps
+}: FormFieldProps) {
   return (
-    <div className="mb-3">
-      <label className="form-label text-uppercase" htmlFor={id}>
-        {label}
-      </label>
-      <input
-        id={id}
-        className={`form-control${error ? ' is-invalid' : ''}`}
-        aria-invalid={Boolean(error)}
-        aria-describedby={error ? errorId : undefined}
-        {...inputProps}
-        {...registration}
-      />
-      {error && (
-        <div id={errorId} className="invalid-feedback">
-          {message(error.message)}
-        </div>
-      )}
-    </div>
+    <Field label={label} error={error} className={className}>
+      {(control) => <input {...controlProps(control)} {...inputProps} {...registration} />}
+    </Field>
   );
 }

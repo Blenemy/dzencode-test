@@ -55,7 +55,10 @@
     "tooLarge": "Слишком большое значение",
     "date": "Некорректная дата",
     "guaranteeRange": "Конец гарантии раньше начала",
-    "photo": "Некорректный путь к фото"
+    "photo": "Некорректный путь к фото",
+    "serialTaken": "Такой серийный номер уже есть",
+    "fileType": "Нужен файл JPEG, PNG или WebP",
+    "fileSize": "Файл больше 2 МБ"
   },
   "errors": {
     "INVALID_CREDENTIALS": "Неверная почта или пароль",
@@ -67,6 +70,10 @@
     "NETWORK": "Нет связи с сервером",
     "UNKNOWN": "Что-то пошло не так, попробуйте ещё раз",
     "NOT_FOUND": "Запись уже удалена",
+    "INVALID_REFERENCE": "Связанная запись не найдена, обновите страницу",
+    "SERIAL_TAKEN": "Такой серийный номер уже есть",
+    "FILE_TOO_LARGE": "Файл больше 2 МБ",
+    "UNSUPPORTED_FILE": "Нужен файл JPEG, PNG или WebP",
     "RETRY": "Обновить страницу"
   },
   "pages": {
@@ -87,7 +94,9 @@
     "retry": "Повторить",
     "close": "Закрыть приход",
     "noProducts": "В этом приходе пока нет продуктов",
-    "detailsFailed": "Не удалось загрузить приход"
+    "detailsFailed": "Не удалось загрузить приход",
+    "create": "Создать приход",
+    "addProduct": "Добавить продукт"
   },
   "products": {
     "title": "Продукты",
@@ -123,7 +132,8 @@
       "FREE": "Свободен",
       "IN_REPAIR": "В ремонте"
     },
-    "delete": "Удалить продукт «{title}»"
+    "delete": "Удалить продукт «{title}»",
+    "create": "Добавить продукт"
   },
   "productTypes": {
     "Monitors": "Мониторы",
@@ -139,6 +149,51 @@
     "noProducts": "В приходе нет продуктов",
     "cancel": "Отменить",
     "confirm": "Удалить",
+    "close": "Закрыть"
+  },
+  "orderForm": {
+    "title": "Новый приход",
+    "name": "Название",
+    "description": "Описание",
+    "date": "Дата",
+    "warehouse": "Склад",
+    "noWarehouse": "Не указан",
+    "submit": "Создать",
+    "cancel": "Отменить",
+    "close": "Закрыть"
+  },
+  "productForm": {
+    "title": "Новый продукт",
+    "subtitle": "Приход «{order}»",
+    "photo": "Фото",
+    "choosePhoto": "Выбрать фото",
+    "replacePhoto": "Заменить",
+    "removePhoto": "Убрать",
+    "photoHint": "JPEG, PNG или WebP до 2 МБ",
+    "dropHint": "или перетащите файл сюда",
+    "uploading": "Загружаем…",
+    "name": "Название",
+    "serial": "Серийный номер",
+    "type": "Тип",
+    "chooseType": "Выберите тип",
+    "specification": "Спецификация",
+    "condition": "Состояние",
+    "isNew": "Новый",
+    "used": "Б / У",
+    "status": "Статус",
+    "guaranteeStart": "Гарантия с",
+    "guaranteeEnd": "Гарантия по",
+    "priceUsd": "Цена, USD",
+    "priceUah": "Цена, UAH",
+    "defaultCurrency": "Основная валюта",
+    "order": "Приход",
+    "chooseOrder": "Выберите приход",
+    "group": "Группа",
+    "noGroup": "Без группы",
+    "user": "Пользователь",
+    "noUser": "Не закреплён",
+    "submit": "Добавить",
+    "cancel": "Отменить",
     "close": "Закрыть"
   },
   "pagination": {

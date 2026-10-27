@@ -55,7 +55,10 @@
     "tooLarge": "Value is too large",
     "date": "Invalid date",
     "guaranteeRange": "Warranty ends before it starts",
-    "photo": "Invalid photo path"
+    "photo": "Invalid photo path",
+    "serialTaken": "This serial number is already used",
+    "fileType": "Use a JPEG, PNG or WebP file",
+    "fileSize": "The file is larger than 2 MB"
   },
   "errors": {
     "INVALID_CREDENTIALS": "Wrong email or password",
@@ -67,6 +70,10 @@
     "NETWORK": "No connection to the server",
     "UNKNOWN": "Something went wrong, please try again",
     "NOT_FOUND": "This record has already been deleted",
+    "INVALID_REFERENCE": "A linked record was not found, reload the page",
+    "SERIAL_TAKEN": "This serial number is already used",
+    "FILE_TOO_LARGE": "The file is larger than 2 MB",
+    "UNSUPPORTED_FILE": "Use a JPEG, PNG or WebP file",
     "RETRY": "Reload page"
   },
   "pages": {
@@ -87,7 +94,9 @@
     "retry": "Retry",
     "close": "Close order",
     "noProducts": "This order has no products yet",
-    "detailsFailed": "Could not load the order"
+    "detailsFailed": "Could not load the order",
+    "create": "Create order",
+    "addProduct": "Add product"
   },
   "products": {
     "title": "Products",
@@ -123,7 +132,8 @@
       "FREE": "Available",
       "IN_REPAIR": "In repair"
     },
-    "delete": "Delete product “{title}”"
+    "delete": "Delete product “{title}”",
+    "create": "Add product"
   },
   "productTypes": {
     "Monitors": "Monitors",
@@ -139,6 +149,51 @@
     "noProducts": "This order has no products",
     "cancel": "Cancel",
     "confirm": "Delete",
+    "close": "Close"
+  },
+  "orderForm": {
+    "title": "New order",
+    "name": "Title",
+    "description": "Description",
+    "date": "Date",
+    "warehouse": "Warehouse",
+    "noWarehouse": "Not set",
+    "submit": "Create",
+    "cancel": "Cancel",
+    "close": "Close"
+  },
+  "productForm": {
+    "title": "New product",
+    "subtitle": "Order “{order}”",
+    "photo": "Photo",
+    "choosePhoto": "Choose photo",
+    "replacePhoto": "Replace",
+    "removePhoto": "Remove",
+    "photoHint": "JPEG, PNG or WebP up to 2 MB",
+    "dropHint": "or drop a file here",
+    "uploading": "Uploading…",
+    "name": "Title",
+    "serial": "Serial number",
+    "type": "Type",
+    "chooseType": "Choose a type",
+    "specification": "Specification",
+    "condition": "Condition",
+    "isNew": "New",
+    "used": "Used",
+    "status": "Status",
+    "guaranteeStart": "Warranty from",
+    "guaranteeEnd": "Warranty to",
+    "priceUsd": "Price, USD",
+    "priceUah": "Price, UAH",
+    "defaultCurrency": "Main currency",
+    "order": "Order",
+    "chooseOrder": "Choose an order",
+    "group": "Group",
+    "noGroup": "No group",
+    "user": "User",
+    "noUser": "Not assigned",
+    "submit": "Add",
+    "cancel": "Cancel",
     "close": "Close"
   },
   "pagination": {
