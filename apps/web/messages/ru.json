@@ -90,11 +90,48 @@
     "detailsFailed": "Не удалось загрузить приход"
   },
   "products": {
+    "title": "Продукты",
+    "empty": "Продукты не найдены",
+    "loadFailed": "Не удалось загрузить продукты",
+    "retry": "Повторить",
+    "filters": {
+      "type": "Тип",
+      "specification": "Спецификация",
+      "all": "Все",
+      "reset": "Сбросить фильтры"
+    },
+    "columns": {
+      "product": "Продукт",
+      "status": "Статус",
+      "guarantee": "Гарантия",
+      "condition": "Состояние",
+      "price": "Цена",
+      "group": "Группа",
+      "user": "Пользователь",
+      "order": "Приход",
+      "date": "Дата",
+      "actions": "Действия"
+    },
+    "guaranteeFrom": "с",
+    "guaranteeTo": "по",
+    "condition": {
+      "new": "новый",
+      "used": "Б / У"
+    },
+    "openOrder": "Открыть приход «{title}»",
     "status": {
       "FREE": "Свободен",
       "IN_REPAIR": "В ремонте"
     },
     "delete": "Удалить продукт «{title}»"
+  },
+  "productTypes": {
+    "Monitors": "Мониторы",
+    "Laptops": "Ноутбуки",
+    "Phones": "Телефоны",
+    "Printers": "Принтеры",
+    "Keyboards": "Клавиатуры",
+    "Mice": "Мыши"
   },
   "deleteDialog": {
     "order": "Вы уверены, что хотите удалить этот приход?",
@@ -103,6 +140,12 @@
     "cancel": "Отменить",
     "confirm": "Удалить",
     "close": "Закрыть"
+  },
+  "pagination": {
+    "label": "Страницы",
+    "previous": "Предыдущая страница",
+    "next": "Следующая страница",
+    "page": "Страница {page}"
   },
   "notFound": {
     "title": "Страница не найдена",
