@@ -1,0 +1,38 @@
+{
+  "name": "dzen-inventory",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Inventory: приходы и продукты. Тестовое задание dZENcode (Next.js + Express + MySQL)",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "workspaces": [
+    "packages/shared",
+    "apps/api",
+    "apps/web"
+  ],
+  "scripts": {
+    "predev": "docker compose up -d --wait mysql && npm run build -w @dzen/shared",
+    "dev": "concurrently -n shared,api,web -c gray,cyan,magenta -k \"npm run dev -w @dzen/shared\" \"npm run dev -w @dzen/api\" \"npm run dev -w @dzen/web\"",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run build -w @dzen/shared && npm run typecheck --workspaces --if-present",
+    "lint": "eslint . && npm run lint -w @dzen/web",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:migrate": "npm run db:migrate -w @dzen/api",
+    "db:deploy": "npm run db:deploy -w @dzen/api",
+    "db:studio": "npm run db:studio -w @dzen/api",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "concurrently": "^10.0.6",
+    "eslint": "^9.39.5",
+    "globals": "^17.11.0",
+    "prettier": "^3.9.10",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.1"
+  }
+}

@@ -1,0 +1,9 @@
+node_modules
+dist
+.next
+**/generated
+package-lock.json
+e2e/test-results
+e2e/playwright-report
+db/*.mwb
+apps/web/next-env.d.ts
