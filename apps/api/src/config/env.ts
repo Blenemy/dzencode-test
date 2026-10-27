@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import path from 'node:path';
 import { z } from 'zod';
 
 const secret = z.string().min(32, 'нужен секрет не короче 32 символов');
@@ -11,6 +12,7 @@ const envSchema = z.object({
   DATABASE_URL: z.string().min(1, 'нужна строка подключения к MySQL'),
   TRUST_PROXY: z.coerce.number().int().min(0).max(10).default(1),
   APP_VERSION: z.string().default('dev'),
+  UPLOADS_DIR: z.string().min(1).default('uploads'),
 
   JWT_ACCESS_SECRET: secret,
   JWT_REFRESH_SECRET: secret,
@@ -54,3 +56,5 @@ export const corsOrigins = env.CORS_ORIGIN.split(',')
   .filter(Boolean);
 
 export const isProduction = env.NODE_ENV === 'production';
+
+export const uploadsDir = path.resolve(process.cwd(), env.UPLOADS_DIR);
