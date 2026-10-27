@@ -6,5 +6,5 @@ export const chartTokens = {
   crosshair: '#b0bec5',
   surface: '#ffffff',
   textPrimary: '#3d4b55',
-  textMuted: '#8a98a3',
+  textMuted: '#62717b',
 } as const;

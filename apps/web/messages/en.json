@@ -18,11 +18,19 @@
   },
   "topMenu": {
     "home": "Home",
-    "search": "Search",
     "sessions": "{count, plural, one {# app tab is open} other {# app tabs are open}}",
     "sessionsOffline": "No connection to the server",
     "logout": "Sign out",
     "language": "Interface language"
+  },
+  "search": {
+    "placeholder": "Search",
+    "label": "Search orders and products",
+    "orders": "Orders",
+    "products": "Products",
+    "empty": "Nothing found",
+    "preparing": "Preparing search…",
+    "failed": "Search is unavailable right now"
   },
   "auth": {
     "loginTitle": "Sign in",
@@ -132,7 +140,28 @@
       "IN_REPAIR": "In repair"
     },
     "delete": "Delete product “{title}”",
-    "create": "Add product"
+    "create": "Add product",
+    "csv": {
+      "button": "Export CSV",
+      "failed": "Could not export CSV",
+      "columns": {
+        "id": "ID",
+        "title": "Title",
+        "serial": "Serial number",
+        "type": "Type",
+        "specification": "Specification",
+        "status": "Status",
+        "condition": "Condition",
+        "guaranteeStart": "Warranty from",
+        "guaranteeEnd": "Warranty to",
+        "priceUsd": "Price, USD",
+        "priceUah": "Price, UAH",
+        "group": "Group",
+        "user": "User",
+        "order": "Order",
+        "date": "Date"
+      }
+    }
   },
   "productTypes": {
     "Monitors": "Monitors",

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#8bc34a" />
+    <title>Нет связи · Inventory</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        box-sizing: border-box;
+        background: #f0f3f5;
+        color: #3d4b55;
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          sans-serif;
+        text-align: center;
+      }
+
+      main {
+        max-width: 420px;
+        padding: 2.5rem 2rem;
+        border: 1px solid #e3e8ec;
+        border-radius: 6px;
+        background: #fff;
+      }
+
+      img {
+        width: 64px;
+        height: 64px;
+      }
+
+      h1 {
+        margin: 1rem 0 0.5rem;
+        font-size: 1.25rem;
+        color: #2f3b44;
+      }
+
+      p {
+        margin: 0 0 0.25rem;
+        line-height: 1.5;
+      }
+
+      .en {
+        color: #8a98a3;
+        font-size: 0.875rem;
+      }
+
+      button {
+        margin-top: 1.5rem;
+        padding: 0.6rem 1.5rem;
+        border: 0;
+        border-radius: 999px;
+        background: #689f38;
+        color: #fff;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      button:focus-visible {
+        outline: 2px solid #2f3b44;
+        outline-offset: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/icons/icon-192.png" alt="" />
+      <h1>Нет связи с сервером</h1>
+      <p>Проверьте подключение к интернету и попробуйте ещё раз.</p>
+      <p class="en" lang="en">You are offline. Check your connection and try again.</p>
+      <button type="button" onclick="location.reload()">Повторить · Retry</button>
+    </main>
+  </body>
+</html>

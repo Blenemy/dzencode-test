@@ -1,14 +1,15 @@
 $brand: #8bc34a;
 $ink: #3d4b55;
-$ink-muted: #8a98a3;
+$ink-muted: #62717b;
+$brand-strong: #4b7427;
 $surface-muted: #f0f3f5;
 $border-soft: #e3e8ec;
 
 $min-contrast-ratio: 2;
 
-$primary: $brand;
-$success: $brand;
-$danger: #e5484d;
+$primary: $brand-strong;
+$success: $brand-strong;
+$danger: #d03b3b;
 $secondary: $ink-muted;
 $dark: $ink;
 
@@ -59,8 +60,8 @@ $pagination-hover-bg: $surface-muted;
 $pagination-hover-border-color: $border-soft;
 $pagination-focus-box-shadow: 0 0 0 0.2rem rgba($brand, 0.25);
 $pagination-active-color: #fff;
-$pagination-active-bg: $brand;
-$pagination-active-border-color: $brand;
+$pagination-active-bg: $brand-strong;
+$pagination-active-border-color: $brand-strong;
 $pagination-disabled-color: #c3ccd2;
 $pagination-disabled-bg: #fff;
 

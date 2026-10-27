@@ -78,8 +78,8 @@
     }
 
     &--active {
-      border-color: #689f38;
-      background: #689f38;
+      border-color: var(--brand-dark);
+      background: var(--brand-dark);
       color: var(--surface);
     }
   }

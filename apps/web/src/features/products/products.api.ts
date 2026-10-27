@@ -3,6 +3,7 @@ import { catalogApi } from '@/features/catalog/catalog.api';
 import { ordersApi } from '@/features/orders/orders.api';
 import { api, succeeded } from '@/store/api';
 import { useHydrateOnce } from '@/store/hydrate';
+import { fetchAllProducts, type ProductFilters } from './all-products';
 import { productsApiPath, type ProductsArgs } from './products-query';
 
 export interface DeleteProductArgs {
@@ -15,6 +16,12 @@ export const productsApi = api.injectEndpoints({
     products: build.query<PageResponse<ProductDto>, ProductsArgs>({
       query: (args) => productsApiPath(args),
       providesTags: [{ type: 'Products', id: 'LIST' }],
+    }),
+    productsExport: build.query<ProductDto[], ProductFilters>({
+      queryFn: (filters, _api, _extra, baseQuery) =>
+        fetchAllProducts((path) => baseQuery(path), filters),
+      keepUnusedDataFor: 0,
+      providesTags: ['Products'],
     }),
     createProduct: build.mutation<ProductDto, CreateProductData>({
       query: (body) => ({ url: '/products', method: 'POST', body }),
@@ -57,7 +64,12 @@ export const productsApi = api.injectEndpoints({
   }),
 });
 
-export const { useProductsQuery, useCreateProductMutation, useDeleteProductMutation } = productsApi;
+export const {
+  useProductsQuery,
+  useLazyProductsExportQuery,
+  useCreateProductMutation,
+  useDeleteProductMutation,
+} = productsApi;
 
 export interface ProductsPageData {
   products: PageResponse<ProductDto> | null;
