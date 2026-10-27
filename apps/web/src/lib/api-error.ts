@@ -16,6 +16,10 @@ export function errorCode(error: QueryError): string {
   return apiBody(error)?.code ?? 'UNKNOWN';
 }
 
+export function errorStatus(error: QueryError): number | null {
+  return error && 'status' in error && typeof error.status === 'number' ? error.status : null;
+}
+
 export function validationIssues(error: QueryError): ValidationIssue[] {
   const details = apiBody(error)?.details as { issues?: ValidationIssue[] } | undefined;
   return Array.isArray(details?.issues) ? details.issues : [];
