@@ -7,7 +7,19 @@ x-api-build: &api-build
 
 x-api-image: &api-image ${IMAGE_REGISTRY:-ghcr.io/blenemy}/dzen-inventory-api:${IMAGE_TAG:-latest}
 
-x-database-url: &database-url mysql://${MYSQL_USER:-inventory}:${MYSQL_PASSWORD:?нужен MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE:-inventory}?allowPublicKeyRetrieval=true
+x-api-env: &api-env
+  NODE_ENV: production
+  PORT: 4000
+  LOG_LEVEL: ${LOG_LEVEL:-info}
+  DATABASE_URL: mysql://${MYSQL_USER:-inventory}:${MYSQL_PASSWORD:?нужен MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE:-inventory}?allowPublicKeyRetrieval=true
+  CORS_ORIGIN: ${PUBLIC_URL:-http://localhost:8080}
+  TRUST_PROXY: ${TRUST_PROXY:-1}
+  APP_VERSION: ${IMAGE_TAG:-local}
+  JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?нужен JWT_ACCESS_SECRET}
+  JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?нужен JWT_REFRESH_SECRET}
+  COOKIE_SECURE: ${COOKIE_SECURE:-false}
+  DEMO_EMAIL: ${DEMO_EMAIL:-demo@dzen.test}
+  DEMO_PASSWORD: ${DEMO_PASSWORD:-demo12345}
 
 services:
   mysql:
@@ -28,6 +40,7 @@ services:
       - '127.0.0.1:${MYSQL_HOST_PORT:-3307}:3306'
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
       test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -uroot -p"$$MYSQL_ROOT_PASSWORD" --silent']
       interval: 10s
@@ -39,9 +52,8 @@ services:
     image: *api-image
     build: *api-build
     restart: 'no'
-    command: ['npx', 'prisma', 'migrate', 'deploy']
-    environment:
-      DATABASE_URL: *database-url
+    command: ['sh', '-c', 'npx prisma migrate deploy && node dist/db/seed.js']
+    environment: *api-env
     depends_on:
       mysql:
         condition: service_healthy
@@ -50,14 +62,7 @@ services:
     image: *api-image
     build: *api-build
     restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 4000
-      LOG_LEVEL: ${LOG_LEVEL:-info}
-      DATABASE_URL: *database-url
-      CORS_ORIGIN: ${PUBLIC_URL:-http://localhost:8080}
-      TRUST_PROXY: ${TRUST_PROXY:-1}
-      APP_VERSION: ${IMAGE_TAG:-local}
+    environment: *api-env
     volumes:
       - uploads:/app/apps/api/uploads
     depends_on:
