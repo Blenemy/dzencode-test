@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Logo } from '@/components/brand/Logo';
 import { LanguageSwitch } from '@/components/i18n/LanguageSwitch';
 import { Icon } from '@/components/icons/Icon';
+import { GlobalSearch } from '@/features/search/GlobalSearch';
 import { Link } from '@/i18n/navigation';
 import { LiveClock } from './LiveClock';
 import { LogoutButton } from './LogoutButton';
@@ -27,15 +28,7 @@ export function TopMenu({ onOpenNavigation }: { onOpenNavigation: () => void }) 
         <Logo />
       </Link>
 
-      <form className="top-menu__search" role="search" onSubmit={(event) => event.preventDefault()}>
-        <Icon name="search" size={13} className="top-menu__search-icon" />
-        <input
-          className="top-menu__search-input"
-          type="search"
-          placeholder={t('topMenu.search')}
-          aria-label={t('topMenu.search')}
-        />
-      </form>
+      <GlobalSearch className="top-menu__search" />
 
       <div className="top-menu__aside">
         <LiveClock />
