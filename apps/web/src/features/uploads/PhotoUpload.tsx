@@ -14,6 +14,7 @@ const ACCEPTED: readonly string[] = UPLOAD_IMAGE_TYPES;
 
 interface PhotoUploadProps {
   label: string;
+  round?: boolean;
   value?: string;
   error?: string;
   onChange: (url: string | undefined) => void;
@@ -22,6 +23,7 @@ interface PhotoUploadProps {
 
 export function PhotoUpload({
   label,
+  round = false,
   value,
   error,
   onChange,
@@ -70,6 +72,7 @@ export function PhotoUpload({
     <div
       className={cx(
         'photo-upload',
+        round && 'photo-upload--round',
         dragging && 'photo-upload--dragging',
         shownError && 'photo-upload--invalid',
       )}
