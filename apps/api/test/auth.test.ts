@@ -56,6 +56,8 @@ describe('POST /api/auth/register', () => {
       path: '/api/auth',
       httponly: true,
     });
+    expect(cookies.get('has_session')?.value).toBe('1');
+    expect(cookies.get('has_session')?.attributes['httponly']).toBeUndefined();
 
     const stored = await prisma.user.findUniqueOrThrow({ where: { email: credentials.email } });
     expect(stored.passwordHash).toMatch(/^\$argon2id\$/);
