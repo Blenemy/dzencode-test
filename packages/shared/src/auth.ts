@@ -24,12 +24,14 @@ export const loginSchema = z.object({
   password: z.string().min(1, { error: 'validation.required' }),
 });
 
+const nameField = z
+  .string()
+  .trim()
+  .min(1, { error: 'validation.required' })
+  .max(NAME_MAX, { error: 'validation.nameMax' });
+
 export const registerSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, { error: 'validation.required' })
-    .max(NAME_MAX, { error: 'validation.nameMax' }),
+  name: nameField,
   email: emailField,
   password: z
     .string()
@@ -37,8 +39,18 @@ export const registerSchema = z.object({
     .max(PASSWORD_MAX, { error: 'validation.passwordMax' }),
 });
 
+export const updateProfileSchema = z.object({
+  name: nameField,
+  avatar: z
+    .string()
+    .max(255)
+    .regex(/^\/uploads\/[A-Za-z0-9._-]+$/, { error: 'validation.photo' })
+    .nullable(),
+});
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
 
 export type UserRole = 'USER' | 'ADMIN';
 

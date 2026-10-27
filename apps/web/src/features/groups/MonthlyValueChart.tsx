@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import type { Currency } from '@dzen/shared';
 import {
   Area,
   AreaChart,
@@ -16,7 +17,9 @@ import { ChartTooltip } from '@/components/charts/ChartTooltip';
 import { formatAmount } from '@/lib/format-money';
 import { MONTHLY_CHART_HEIGHT, type MonthPoint } from './chart-data';
 
-export function MonthlyValueChart({ data }: { data: MonthPoint[] }) {
+export function MonthlyValueChart({ data, currency }: { data: MonthPoint[]; currency: Currency }) {
+  const key = currency === 'USD' ? 'usd' : 'uah';
+  const other: Currency = currency === 'USD' ? 'UAH' : 'USD';
   const t = useTranslations('groups');
   const locale = useLocale();
   const compact = useMemo(
@@ -55,8 +58,8 @@ export function MonthlyValueChart({ data }: { data: MonthPoint[] }) {
               <ChartTooltip
                 title={point.full}
                 rows={[
-                  { label: 'UAH', value: formatAmount(point.uah), color: chartTokens.series },
-                  { label: 'USD', value: formatAmount(point.usd) },
+                  { label: currency, value: formatAmount(point[key]), color: chartTokens.series },
+                  { label: other, value: formatAmount(point[other === 'USD' ? 'usd' : 'uah']) },
                   { label: t('columns.orders'), value: String(point.orders) },
                 ]}
               />
@@ -65,7 +68,7 @@ export function MonthlyValueChart({ data }: { data: MonthPoint[] }) {
         />
         <Area
           type="monotone"
-          dataKey="uah"
+          dataKey={key}
           stroke={chartTokens.series}
           strokeWidth={2}
           fill={chartTokens.series}

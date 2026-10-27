@@ -7,20 +7,29 @@ import { UPLOAD_IMAGE_TYPES, UPLOAD_MAX_BYTES } from '@dzen/shared';
 import { Icon } from '@/components/icons/Icon';
 import { cx } from '@/lib/cx';
 import { useErrorMessage, useValidationMessage } from '@/lib/use-messages';
-import { useUploadImageMutation } from './products.api';
+import { useUploadImageMutation } from './uploads.api';
 import './photo-upload.scss';
 
 const ACCEPTED: readonly string[] = UPLOAD_IMAGE_TYPES;
 
 interface PhotoUploadProps {
+  label: string;
+  round?: boolean;
   value?: string;
   error?: string;
   onChange: (url: string | undefined) => void;
   onUploadingChange: (uploading: boolean) => void;
 }
 
-export function PhotoUpload({ value, error, onChange, onUploadingChange }: PhotoUploadProps) {
-  const t = useTranslations('productForm');
+export function PhotoUpload({
+  label,
+  round = false,
+  value,
+  error,
+  onChange,
+  onUploadingChange,
+}: PhotoUploadProps) {
+  const t = useTranslations('upload');
   const validationMessage = useValidationMessage();
   const errorMessage = useErrorMessage();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -63,6 +72,7 @@ export function PhotoUpload({ value, error, onChange, onUploadingChange }: Photo
     <div
       className={cx(
         'photo-upload',
+        round && 'photo-upload--round',
         dragging && 'photo-upload--dragging',
         shownError && 'photo-upload--invalid',
       )}
@@ -91,7 +101,7 @@ export function PhotoUpload({ value, error, onChange, onUploadingChange }: Photo
       </div>
 
       <div className="photo-upload__body">
-        <span className="form-label text-uppercase">{t('photo')}</span>
+        <span className="form-label text-uppercase">{label}</span>
         <div className="photo-upload__actions">
           <button
             type="button"
@@ -100,7 +110,7 @@ export function PhotoUpload({ value, error, onChange, onUploadingChange }: Photo
             disabled={isLoading}
           >
             <Icon name="upload" size={14} />
-            {value ? t('replacePhoto') : t('choosePhoto')}
+            {value ? t('replace') : t('choose')}
           </button>
           {value && !isLoading && (
             <button
@@ -108,12 +118,12 @@ export function PhotoUpload({ value, error, onChange, onUploadingChange }: Photo
               className="btn btn-sm btn-link photo-upload__remove"
               onClick={() => onChange(undefined)}
             >
-              {t('removePhoto')}
+              {t('remove')}
             </button>
           )}
         </div>
         <p className="photo-upload__hint" aria-live="polite">
-          {isLoading ? t('uploading') : `${t('photoHint')}, ${t('dropHint')}`}
+          {isLoading ? t('uploading') : `${t('hint')}, ${t('dropHint')}`}
         </p>
         {shownError && <div className="invalid-feedback d-block">{shownError}</div>}
         <input

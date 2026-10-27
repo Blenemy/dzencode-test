@@ -4,12 +4,12 @@ import { motion } from 'motion/react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { OrderSummaryDto } from '@dzen/shared';
 import { TrashButton } from '@/components/buttons/TrashButton';
+import { MoneyPair } from '@/components/money/MoneyPair';
 import { Icon } from '@/components/icons/Icon';
 import { deleteRequested } from '@/features/deletion/deletion.slice';
 import { Link } from '@/i18n/navigation';
 import { cx } from '@/lib/cx';
 import { daySlashMonthSlashYear, monthOfYear } from '@/lib/format-date';
-import { amountIn, formatAmount } from '@/lib/format-money';
 import { useAppDispatch } from '@/store/hooks';
 
 interface OrderRowProps {
@@ -22,8 +22,6 @@ export function OrderRow({ order, compact, active }: OrderRowProps) {
   const t = useTranslations('orders');
   const locale = useLocale();
   const dispatch = useAppDispatch();
-  const usd = amountIn(order.totals, 'USD');
-  const uah = amountIn(order.totals, 'UAH');
 
   return (
     <motion.li
@@ -58,12 +56,7 @@ export function OrderRow({ order, compact, active }: OrderRowProps) {
           {daySlashMonthSlashYear(order.date, locale)}
         </time>
       </span>
-      <span className="order-row__sum">
-        {usd > 0 && <span className="order-row__sum-secondary">{formatAmount(usd)} $</span>}
-        <span className="order-row__sum-primary">
-          {formatAmount(uah)} <span className="order-row__currency">UAH</span>
-        </span>
-      </span>
+      <MoneyPair className="order-row__sum" amounts={order.totals} />
       {!compact && (
         <TrashButton
           className="order-row__delete"

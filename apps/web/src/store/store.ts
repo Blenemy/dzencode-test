@@ -1,11 +1,12 @@
 import { combineSlices, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import { deletionSlice } from '@/features/deletion/deletion.slice';
+import { listenToPreferences, preferencesSlice } from '@/features/preferences/preferences.slice';
 import { api } from './api';
 import { authSlice, loggedOut } from './auth.slice';
 import { listenToInventoryEvents } from './realtime';
 import { sessionsSlice } from './sessions.slice';
 
-const rootReducer = combineSlices(api, authSlice, sessionsSlice, deletionSlice);
+const rootReducer = combineSlices(api, authSlice, sessionsSlice, deletionSlice, preferencesSlice);
 
 export type RootState = ReturnType<typeof rootReducer>;
 
@@ -19,6 +20,7 @@ export function makeStore(preloadedState?: Partial<RootState>) {
     },
   });
   listenToInventoryEvents(listener);
+  listenToPreferences(listener);
 
   return configureStore({
     reducer: rootReducer,

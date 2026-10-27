@@ -24,11 +24,11 @@ import {
   useUsersQuery,
 } from '@/features/catalog/catalog.api';
 import { useProductTypeName } from '@/features/catalog/use-type-name';
+import { PhotoUpload } from '@/features/uploads/PhotoUpload';
 import { useOrdersQuery } from '@/features/orders/orders.api';
 import { errorCode } from '@/lib/api-error';
 import { toDateInputValue } from '@/lib/format-date';
 import { useErrorMessage } from '@/lib/use-messages';
-import { PhotoUpload } from './PhotoUpload';
 import { useCreateProductMutation } from './products.api';
 
 interface CreateProductDialogProps {
@@ -138,6 +138,7 @@ export function CreateProductDialog({
               render={({ field, fieldState }) => (
                 <div className="form-grid__wide">
                   <PhotoUpload
+                    label={t('photo')}
                     value={typeof field.value === 'string' && field.value ? field.value : undefined}
                     error={fieldState.error?.message}
                     onChange={(url) => field.onChange(url ?? '')}

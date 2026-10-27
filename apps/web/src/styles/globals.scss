@@ -26,6 +26,17 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+[data-motion='reduced'] {
+  scroll-behavior: auto;
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
+
 .visually-hidden-focusable:focus {
   z-index: 1080;
 }

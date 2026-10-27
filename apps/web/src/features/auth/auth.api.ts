@@ -1,4 +1,4 @@
-import type { AuthUserResponse, LoginInput, RegisterInput } from '@dzen/shared';
+import type { AuthUserResponse, LoginInput, RegisterInput, UpdateProfileInput } from '@dzen/shared';
 import { api } from '@/store/api';
 import { loggedOut, userLoaded } from '@/store/auth.slice';
 
@@ -22,6 +22,21 @@ export const authApi = api.injectEndpoints({
         if (result) dispatch(userLoaded(result.data.user));
       },
     }),
+    updateProfile: build.mutation<AuthUserResponse, UpdateProfileInput>({
+      query: (body) => ({ url: '/auth/me', method: 'PATCH', body }),
+      async onQueryStarted(_input, { dispatch, queryFulfilled }) {
+        const result = await queryFulfilled.catch(() => null);
+        if (result) dispatch(userLoaded(result.data.user));
+      },
+      invalidatesTags: ['Catalog'],
+    }),
+    logoutEverywhere: build.mutation<{ ok: boolean }, void>({
+      query: () => ({ url: '/auth/sessions', method: 'DELETE' }),
+      async onQueryStarted(_input, { dispatch, queryFulfilled }) {
+        const result = await queryFulfilled.catch(() => null);
+        if (result) dispatch(loggedOut());
+      },
+    }),
     logout: build.mutation<{ ok: boolean }, void>({
       query: () => ({ url: '/auth/logout', method: 'POST' }),
       async onQueryStarted(_input, { dispatch, queryFulfilled }) {
@@ -32,4 +47,11 @@ export const authApi = api.injectEndpoints({
   }),
 });
 
-export const { useMeQuery, useLoginMutation, useRegisterMutation, useLogoutMutation } = authApi;
+export const {
+  useMeQuery,
+  useLoginMutation,
+  useRegisterMutation,
+  useUpdateProfileMutation,
+  useLogoutMutation,
+  useLogoutEverywhereMutation,
+} = authApi;

@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useLocale, useTranslations } from 'next-intl';
 import { ChartCard, StatTile } from '@/components/charts/ChartCard';
+import { formatMoney, useCurrencyOrder } from '@/components/money/MoneyPair';
 import { useGroupsQuery } from '@/features/catalog/catalog.api';
 import { useProductTypeName } from '@/features/catalog/use-type-name';
 import {
@@ -56,6 +57,7 @@ export function GroupsView({ initial }: { initial: GroupsPageData }) {
   );
   const integer = useMemo(() => new Intl.NumberFormat(locale), [locale]);
   const typeName = useProductTypeName();
+  const [primary, secondary] = useCurrencyOrder();
   const typePoints = useMemo<TypePoint[]>(
     () => (data ? data.byType.map((row) => ({ name: typeName(row.type), count: row.count })) : []),
     [data, typeName],
@@ -116,8 +118,8 @@ export function GroupsView({ initial }: { initial: GroupsPageData }) {
         <StatTile label={t('kpi.products')} value={integer.format(data.totals.products)} />
         <StatTile
           label={t('kpi.value')}
-          value={`${formatAmount(amountIn(data.totals.value, 'UAH'))} UAH`}
-          note={`${formatAmount(amountIn(data.totals.value, 'USD'))} $`}
+          value={formatMoney(amountIn(data.totals.value, primary), primary)}
+          note={formatMoney(amountIn(data.totals.value, secondary), secondary)}
         />
       </div>
 
@@ -190,7 +192,7 @@ export function GroupsView({ initial }: { initial: GroupsPageData }) {
         <ChartCard
           className="groups__wide"
           title={t('byMonth')}
-          hint={t('byMonthHint')}
+          hint={t('byMonthHint', { currency: primary })}
           tableLabel={t('table')}
           table={
             <table>
@@ -216,7 +218,7 @@ export function GroupsView({ initial }: { initial: GroupsPageData }) {
           }
         >
           {monthPoints.length > 0 ? (
-            <MonthlyValueChart data={monthPoints} />
+            <MonthlyValueChart data={monthPoints} currency={primary} />
           ) : (
             <p className="text-muted mb-0">{t('empty')}</p>
           )}

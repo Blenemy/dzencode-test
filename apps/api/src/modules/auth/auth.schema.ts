@@ -1,6 +1,13 @@
 import type { Prisma } from '../../generated/prisma/client.js';
 
-export { loginSchema, registerSchema, type LoginInput, type RegisterInput } from '@dzen/shared';
+export {
+  loginSchema,
+  registerSchema,
+  updateProfileSchema,
+  type LoginInput,
+  type RegisterInput,
+  type UpdateProfileInput,
+} from '@dzen/shared';
 
 export interface SessionMeta {
   userAgent: string | null;

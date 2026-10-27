@@ -81,8 +81,7 @@
     "products": "Products",
     "groups": "Groups",
     "users": "Users",
-    "settings": "Settings",
-    "soon": "This section is filled in the next steps"
+    "settings": "Settings"
   },
   "orders": {
     "title": "Orders",
@@ -156,7 +155,7 @@
     "byStatus": "Product statuses",
     "byType": "Products by type",
     "byMonth": "Order value by month",
-    "byMonthHint": "Sum of product prices in UAH by order month",
+    "byMonthHint": "Sum of product prices in {currency} by order month",
     "ordersCount": "{count, plural, one {# order} other {# orders}}",
     "productsCount": "{count, plural, one {# product} other {# products}}",
     "table": "Show as table",
@@ -189,6 +188,36 @@
     "loadFailed": "Could not load users",
     "retry": "Retry"
   },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "profileHint": "Your name and avatar appear in the menu and in the staff list",
+    "avatar": "Avatar",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "roles": {
+      "USER": "User",
+      "ADMIN": "Administrator"
+    },
+    "save": "Save",
+    "saved": "Saved",
+    "interface": "Interface",
+    "interfaceHint": "Stored in this browser and applied to every tab at once",
+    "language": "Language",
+    "currency": "Main currency",
+    "currencyHint": "Shown large in orders, products and charts",
+    "motion": "Animations",
+    "motionSystem": "Follow the system",
+    "motionReduced": "Off",
+    "session": "Session",
+    "tabs": "Open tabs",
+    "tabId": "This tab",
+    "tabIdHint": "The ID lives in sessionStorage: it survives a reload and differs per tab",
+    "logout": "Sign out",
+    "logoutEverywhere": "Sign out everywhere",
+    "logoutEverywhereHint": "Revokes every session: other devices lose access once their short-lived token expires"
+  },
   "deleteDialog": {
     "order": "Are you sure you want to delete this order?",
     "product": "Are you sure you want to delete this product?",
@@ -212,12 +241,6 @@
     "title": "New product",
     "subtitle": "Order “{order}”",
     "photo": "Photo",
-    "choosePhoto": "Choose photo",
-    "replacePhoto": "Replace",
-    "removePhoto": "Remove",
-    "photoHint": "JPEG, PNG or WebP up to 2 MB",
-    "dropHint": "or drop a file here",
-    "uploading": "Uploading…",
     "name": "Title",
     "serial": "Serial number",
     "type": "Type",
@@ -241,6 +264,14 @@
     "submit": "Add",
     "cancel": "Cancel",
     "close": "Close"
+  },
+  "upload": {
+    "choose": "Choose photo",
+    "replace": "Replace",
+    "remove": "Remove",
+    "hint": "JPEG, PNG or WebP up to 2 MB",
+    "dropHint": "or drop a file here",
+    "uploading": "Uploading…"
   },
   "pagination": {
     "label": "Pages",
