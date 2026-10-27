@@ -143,6 +143,35 @@
     "Keyboards": "Keyboards",
     "Mice": "Mice"
   },
+  "groups": {
+    "title": "Groups",
+    "kpi": {
+      "orders": "Orders",
+      "products": "Products",
+      "value": "Total value"
+    },
+    "byGroup": "Products by group",
+    "byGroupHint": "How many products each group holds",
+    "ungrouped": "No group",
+    "byStatus": "Product statuses",
+    "byType": "Products by type",
+    "byMonth": "Order value by month",
+    "byMonthHint": "Sum of product prices in UAH by order month",
+    "ordersCount": "{count, plural, one {# order} other {# orders}}",
+    "productsCount": "{count, plural, one {# product} other {# products}}",
+    "table": "Show as table",
+    "columns": {
+      "group": "Group",
+      "type": "Type",
+      "month": "Month",
+      "products": "Products",
+      "orders": "Orders",
+      "share": "Share"
+    },
+    "loadFailed": "Could not load statistics",
+    "retry": "Retry",
+    "empty": "No data yet"
+  },
   "deleteDialog": {
     "order": "Are you sure you want to delete this order?",
     "product": "Are you sure you want to delete this product?",
