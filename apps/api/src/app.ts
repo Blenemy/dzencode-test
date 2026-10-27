@@ -3,7 +3,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { corsOrigins, env } from './config/env.js';
+import { checkOrigin } from './middleware/auth.js';
 import { errorHandler, notFoundHandler } from './middleware/error.js';
+import { authRouter } from './modules/auth/auth.routes.js';
+import { docsRouter } from './modules/docs/docs.routes.js';
 import { healthRouter } from './modules/health/health.routes.js';
 
 export function createApp(): Express {
@@ -14,9 +17,12 @@ export function createApp(): Express {
   app.use(helmet());
   app.use(cors({ origin: corsOrigins, credentials: true }));
   app.use(cookieParser());
+  app.use(checkOrigin);
   app.use(express.json({ limit: '1mb' }));
 
   app.use('/api', healthRouter);
+  app.use('/api', authRouter);
+  app.use('/api', docsRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

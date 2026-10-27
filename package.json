@@ -20,8 +20,12 @@
     "lint": "eslint . && npm run lint -w @dzen/web",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "test": "npm run test --workspaces --if-present",
+    "test:api": "npm run test -w @dzen/api",
     "db:migrate": "npm run db:migrate -w @dzen/api",
+    "db:apply": "npm run db:apply -w @dzen/api",
     "db:deploy": "npm run db:deploy -w @dzen/api",
+    "db:seed": "npm run db:seed -w @dzen/api",
     "db:studio": "npm run db:studio -w @dzen/api",
     "docker:up": "docker compose up -d --build",
     "docker:down": "docker compose down"
