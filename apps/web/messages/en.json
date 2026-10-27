@@ -212,12 +212,6 @@
     "title": "New product",
     "subtitle": "Order “{order}”",
     "photo": "Photo",
-    "choosePhoto": "Choose photo",
-    "replacePhoto": "Replace",
-    "removePhoto": "Remove",
-    "photoHint": "JPEG, PNG or WebP up to 2 MB",
-    "dropHint": "or drop a file here",
-    "uploading": "Uploading…",
     "name": "Title",
     "serial": "Serial number",
     "type": "Type",
@@ -241,6 +235,14 @@
     "submit": "Add",
     "cancel": "Cancel",
     "close": "Close"
+  },
+  "upload": {
+    "choose": "Choose photo",
+    "replace": "Replace",
+    "remove": "Remove",
+    "hint": "JPEG, PNG or WebP up to 2 MB",
+    "dropHint": "or drop a file here",
+    "uploading": "Uploading…"
   },
   "pagination": {
     "label": "Pages",

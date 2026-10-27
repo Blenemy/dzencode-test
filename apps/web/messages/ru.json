@@ -212,12 +212,6 @@
     "title": "Новый продукт",
     "subtitle": "Приход «{order}»",
     "photo": "Фото",
-    "choosePhoto": "Выбрать фото",
-    "replacePhoto": "Заменить",
-    "removePhoto": "Убрать",
-    "photoHint": "JPEG, PNG или WebP до 2 МБ",
-    "dropHint": "или перетащите файл сюда",
-    "uploading": "Загружаем…",
     "name": "Название",
     "serial": "Серийный номер",
     "type": "Тип",
@@ -241,6 +235,14 @@
     "submit": "Добавить",
     "cancel": "Отменить",
     "close": "Закрыть"
+  },
+  "upload": {
+    "choose": "Выбрать фото",
+    "replace": "Заменить",
+    "remove": "Убрать",
+    "hint": "JPEG, PNG или WebP до 2 МБ",
+    "dropHint": "или перетащите файл сюда",
+    "uploading": "Загружаем…"
   },
   "pagination": {
     "label": "Страницы",
