@@ -100,7 +100,7 @@ Push в `main` запускает `.github/workflows/deploy.yml`:
 
 ```bash
 sudo mkdir -p /opt/dzen-inventory && sudo chown deploy:deploy /opt/dzen-inventory
-git clone https://github.com/Blenemy/dzen-inventory.git /opt/dzen-inventory
+git clone https://github.com/Blenemy/dzencode-test.git /opt/dzen-inventory
 cd /opt/dzen-inventory && cp .env.example .env && chmod 600 .env
 sudo cp deploy/host-nginx.conf /etc/nginx/sites-available/dzen
 sudo ln -s /etc/nginx/sites-available/dzen /etc/nginx/sites-enabled/dzen
