@@ -4,12 +4,15 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import type { OrderDetailsDto } from '@dzen/shared';
+import { TrashButton } from '@/components/buttons/TrashButton';
 import { Icon } from '@/components/icons/Icon';
+import { deleteRequested } from '@/features/deletion/deletion.slice';
 import { ProductStatus, ProductSummary } from '@/features/products/ProductSummary';
 import { useRouter } from '@/i18n/navigation';
 import { errorStatus } from '@/lib/api-error';
 import { useEntranceAnimation } from '@/lib/use-entrance';
 import { useErrorMessage } from '@/lib/use-messages';
+import { useAppDispatch } from '@/store/hooks';
 import { useHydrateOrder, useOrderQuery } from './orders.api';
 
 const HIDDEN = { opacity: 0, x: 48 };
@@ -24,6 +27,8 @@ interface OrderDetailsPanelProps {
 export function OrderDetailsPanel({ id, initial }: OrderDetailsPanelProps) {
   useHydrateOrder(initial);
   const t = useTranslations('orders');
+  const tProducts = useTranslations('products');
+  const dispatch = useAppDispatch();
   const errorMessage = useErrorMessage();
   const router = useRouter();
   const animateEntrance = useEntranceAnimation();
@@ -77,6 +82,10 @@ export function OrderDetailsPanel({ id, initial }: OrderDetailsPanelProps) {
                   >
                     <ProductSummary product={product} />
                     <ProductStatus status={product.status} />
+                    <TrashButton
+                      label={tProducts('delete', { title: product.title })}
+                      onClick={() => dispatch(deleteRequested({ kind: 'product', product }))}
+                    />
                   </motion.li>
                 ))}
               </AnimatePresence>
