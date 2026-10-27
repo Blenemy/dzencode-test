@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
+import '@/styles/generated/bootstrap.css';
+import '@/styles/globals.scss';
 
 const montserrat = Montserrat({
   subsets: ['latin', 'cyrillic'],

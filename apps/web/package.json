@@ -5,7 +5,10 @@
   "description": "Next.js фронтенд: SSR, Redux, i18n",
   "type": "module",
   "scripts": {
+    "styles": "sass --load-path=../../node_modules --quiet-deps --silence-deprecation=import --silence-deprecation=global-builtin --silence-deprecation=color-functions --silence-deprecation=if-function --style=compressed --no-source-map src/styles/bootstrap.scss src/styles/generated/bootstrap.css",
+    "predev": "npm run styles",
     "dev": "next dev -p 3000",
+    "prebuild": "npm run styles",
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "eslint .",

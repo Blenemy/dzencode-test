@@ -12,11 +12,6 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
 
-  sassOptions: {
-    quietDeps: true,
-    silenceDeprecations: ['import', 'global-builtin', 'color-functions', 'if-function'],
-  },
-
   experimental: {
     optimizePackageImports: ['react-bootstrap'],
   },
