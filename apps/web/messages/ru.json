@@ -140,7 +140,28 @@
       "IN_REPAIR": "В ремонте"
     },
     "delete": "Удалить продукт «{title}»",
-    "create": "Добавить продукт"
+    "create": "Добавить продукт",
+    "csv": {
+      "button": "Экспорт CSV",
+      "failed": "Не удалось выгрузить CSV",
+      "columns": {
+        "id": "ID",
+        "title": "Название",
+        "serial": "Серийный номер",
+        "type": "Тип",
+        "specification": "Спецификация",
+        "status": "Статус",
+        "condition": "Состояние",
+        "guaranteeStart": "Гарантия с",
+        "guaranteeEnd": "Гарантия по",
+        "priceUsd": "Цена, USD",
+        "priceUah": "Цена, UAH",
+        "group": "Группа",
+        "user": "Пользователь",
+        "order": "Приход",
+        "date": "Дата"
+      }
+    }
   },
   "productTypes": {
     "Monitors": "Мониторы",

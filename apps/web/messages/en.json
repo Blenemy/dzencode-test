@@ -140,7 +140,28 @@
       "IN_REPAIR": "In repair"
     },
     "delete": "Delete product “{title}”",
-    "create": "Add product"
+    "create": "Add product",
+    "csv": {
+      "button": "Export CSV",
+      "failed": "Could not export CSV",
+      "columns": {
+        "id": "ID",
+        "title": "Title",
+        "serial": "Serial number",
+        "type": "Type",
+        "specification": "Specification",
+        "status": "Status",
+        "condition": "Condition",
+        "guaranteeStart": "Warranty from",
+        "guaranteeEnd": "Warranty to",
+        "priceUsd": "Price, USD",
+        "priceUah": "Price, UAH",
+        "group": "Group",
+        "user": "User",
+        "order": "Order",
+        "date": "Date"
+      }
+    }
   },
   "productTypes": {
     "Monitors": "Monitors",

@@ -8,6 +8,7 @@ import { AddButton } from '@/components/buttons/AddButton';
 import { useDialog } from '@/components/dialog/use-dialog';
 import { Pagination } from '@/components/pagination/Pagination';
 import { useErrorMessage } from '@/lib/use-messages';
+import { ExportCsvButton } from './ExportCsvButton';
 import { ProductFilters } from './ProductFilters';
 import { useHydrateProductsPage, useProductsQuery, type ProductsPageData } from './products.api';
 import {
@@ -77,6 +78,7 @@ export function ProductsView({ initial }: { initial: ProductsPageData }) {
           {t('title')} <span className="products__total">/ {data ? data.total : '…'}</span>
         </h1>
         <ProductFilters args={args} onChange={navigate} />
+        <ExportCsvButton filters={{ typeId: args.typeId, specification: args.specification }} />
       </header>
 
       {isLoading && (
