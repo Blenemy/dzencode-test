@@ -12,6 +12,16 @@ enum Role {
   ADMIN
 }
 
+enum ProductStatus {
+  FREE
+  IN_REPAIR
+}
+
+enum Currency {
+  USD
+  UAH
+}
+
 model User {
   id           Int       @id @default(autoincrement())
   email        String    @unique @db.VarChar(191)
@@ -20,12 +30,17 @@ model User {
   role         Role      @default(USER)
   isActive     Boolean   @default(true) @map("is_active")
   avatar       String?   @db.VarChar(255)
+  warehouseId  Int?      @map("warehouse_id")
   lastLoginAt  DateTime? @map("last_login_at")
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
 
+  warehouse     Warehouse?     @relation(fields: [warehouseId], references: [id], onDelete: SetNull)
   refreshTokens RefreshToken[]
+  products      Product[]
+  orders        Order[]
 
+  @@index([warehouseId])
   @@map("users")
 }
 
@@ -46,4 +61,104 @@ model RefreshToken {
   @@index([familyId])
   @@index([expiresAt])
   @@map("refresh_tokens")
+}
+
+model Warehouse {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  city      String   @db.VarChar(100)
+  address   String   @db.VarChar(255)
+  latitude  Float
+  longitude Float
+  createdAt DateTime @default(now()) @map("created_at")
+
+  users  User[]
+  orders Order[]
+
+  @@map("warehouses")
+}
+
+model ProductType {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(100)
+
+  products Product[]
+
+  @@map("product_types")
+}
+
+model ProductGroup {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  products Product[]
+
+  @@map("product_groups")
+}
+
+model Order {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  date        DateTime
+  warehouseId Int?     @map("warehouse_id")
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  warehouse Warehouse? @relation(fields: [warehouseId], references: [id], onDelete: SetNull)
+  createdBy User?      @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  products  Product[]
+
+  @@index([date])
+  @@index([warehouseId])
+  @@index([createdById])
+  @@map("orders")
+}
+
+model Product {
+  id             Int           @id @default(autoincrement())
+  serialNumber   String        @unique @map("serial_number") @db.VarChar(64)
+  isNew          Boolean       @default(true) @map("is_new")
+  photo          String?       @db.VarChar(255)
+  title          String        @db.VarChar(255)
+  typeId         Int           @map("type_id")
+  specification  String        @db.VarChar(255)
+  status         ProductStatus @default(FREE)
+  guaranteeStart DateTime      @map("guarantee_start")
+  guaranteeEnd   DateTime      @map("guarantee_end")
+  orderId        Int           @map("order_id")
+  groupId        Int?          @map("group_id")
+  userId         Int?          @map("user_id")
+  date           DateTime
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  type   ProductType    @relation(fields: [typeId], references: [id], onDelete: Restrict)
+  order  Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  group  ProductGroup?  @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  user   User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  prices ProductPrice[]
+
+  @@index([orderId])
+  @@index([typeId, specification])
+  @@index([groupId])
+  @@index([userId])
+  @@index([status])
+  @@map("products")
+}
+
+model ProductPrice {
+  id        Int      @id @default(autoincrement())
+  productId Int      @map("product_id")
+  value     Decimal  @db.Decimal(12, 2)
+  symbol    Currency
+  isDefault Boolean  @default(false) @map("is_default")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, symbol])
+  @@map("product_prices")
 }

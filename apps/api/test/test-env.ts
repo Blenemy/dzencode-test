@@ -1,3 +1,6 @@
+import os from 'node:os';
+import path from 'node:path';
+
 export const TEST_ORIGIN = 'http://localhost:3000';
 
 export const testEnv = {
@@ -13,4 +16,5 @@ export const testEnv = {
   JWT_ACCESS_TTL: '900',
   JWT_REFRESH_TTL: '2592000',
   COOKIE_SECURE: 'false',
+  UPLOADS_DIR: path.join(os.tmpdir(), 'dzen-inventory-test-uploads'),
 };

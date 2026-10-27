@@ -4,9 +4,11 @@ import { env } from '../../config/env.js';
 import { buildOpenApiSpec } from '../../lib/openapi.js';
 import { registerAuthDocs } from '../auth/auth.openapi.js';
 import { registerHealthDocs } from '../health/health.openapi.js';
+import { registerInventoryDocs } from './inventory.openapi.js';
 
 registerHealthDocs();
 registerAuthDocs();
+registerInventoryDocs();
 
 export const docsRouter: Router = Router();
 

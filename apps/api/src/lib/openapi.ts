@@ -6,10 +6,11 @@ const paths: Record<string, Record<string, unknown>> = {};
 const schemas: Record<string, unknown> = {};
 
 export function schemaFromZod(schema: z.ZodType): Record<string, unknown> {
-  const json = z.toJSONSchema(schema, { target: 'openapi-3.0', io: 'input' }) as Record<
-    string,
-    unknown
-  >;
+  const json = z.toJSONSchema(schema, {
+    target: 'openapi-3.0',
+    io: 'output',
+    unrepresentable: 'any',
+  }) as Record<string, unknown>;
   delete json['$schema'];
   delete json['id'];
   return json;
@@ -20,6 +21,25 @@ export function jsonBody(schema: z.ZodType) {
     required: true,
     content: { 'application/json': { schema: schemaFromZod(schema) } },
   };
+}
+
+export function jsonSchemaResponse(description: string, schema: Record<string, unknown>) {
+  return { description, content: { 'application/json': { schema } } };
+}
+
+export function ref(name: string) {
+  return { $ref: `#/components/schemas/${name}` };
+}
+
+export function queryParameters(schema: z.ZodObject) {
+  const json = schemaFromZod(schema);
+  const properties = (json['properties'] ?? {}) as Record<string, unknown>;
+  return Object.entries(properties).map(([name, property]) => ({
+    name,
+    in: 'query',
+    required: false,
+    schema: property,
+  }));
 }
 
 export function jsonResponse(description: string, ref: string) {
