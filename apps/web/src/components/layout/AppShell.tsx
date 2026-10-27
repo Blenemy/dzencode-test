@@ -2,6 +2,8 @@
 
 import { useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
+import { SessionWatcher } from '@/features/auth/SessionWatcher';
+import { RealtimeBridge } from '@/features/realtime/RealtimeBridge';
 import { NavigationMenu } from './NavigationMenu';
 import { TopMenu } from './TopMenu';
 import './app-shell.scss';
@@ -12,6 +14,8 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="app-shell">
+      <RealtimeBridge />
+      <SessionWatcher />
       <a className="visually-hidden-focusable app-shell__skip" href="#main">
         {t('skip')}
       </a>

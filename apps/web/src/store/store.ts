@@ -1,6 +1,7 @@
 import { combineSlices, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import { api } from './api';
 import { authSlice, loggedOut } from './auth.slice';
+import { listenToInventoryEvents } from './realtime';
 import { sessionsSlice } from './sessions.slice';
 
 const rootReducer = combineSlices(api, authSlice, sessionsSlice);
@@ -16,6 +17,7 @@ export function makeStore(preloadedState?: Partial<RootState>) {
       listenerApi.dispatch(api.util.resetApiState());
     },
   });
+  listenToInventoryEvents(listener);
 
   return configureStore({
     reducer: rootReducer,
