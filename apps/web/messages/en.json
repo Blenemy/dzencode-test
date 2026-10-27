@@ -38,7 +38,8 @@
     "toRegister": "Sign up",
     "haveAccount": "Already have an account?",
     "toLogin": "Sign in",
-    "restoring": "Restoring your session…"
+    "restoring": "Restoring your session…",
+    "or": "or"
   },
   "validation": {
     "required": "Required field",

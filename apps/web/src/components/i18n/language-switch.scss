@@ -1,0 +1,35 @@
+.language-switch {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px;
+  background: var(--surface);
+
+  &__option {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+    background: transparent;
+    color: var(--ink-muted);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.2s var(--ease-out),
+      color 0.2s var(--ease-out);
+
+    &:hover {
+      color: var(--ink);
+    }
+
+    &--active {
+      background: var(--brand);
+      color: #fff;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+}
