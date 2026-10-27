@@ -29,3 +29,7 @@ export async function getCurrentUser(): Promise<CurrentUser> {
   if (result.ok) return { state: 'authenticated', user: result.data.user };
   return result.status === 401 ? { state: 'expired' } : { state: 'unavailable' };
 }
+
+export function dataOrNull<T>(result: ServerResult<T>): T | null {
+  return result.ok ? result.data : null;
+}
