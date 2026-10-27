@@ -9,12 +9,12 @@
 
 ## Стек
 
-| Часть          | Технологии                                               |
-| -------------- | -------------------------------------------------------- |
-| web            | Next.js 16 (App Router, SSR), React 19, TypeScript       |
-| api            | Express 5, Prisma 7, MySQL 8.4, TypeScript               |
-| общий код      | `packages/shared`: схемы валидации, типы DTO, форматтеры |
-| инфраструктура | Docker Compose, nginx-шлюз, GitHub Actions → GHCR → VPS  |
+| Часть          | Технологии                                                                                                                                                          |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| web            | Next.js 16 (App Router, SSR), React 19, TypeScript, Redux Toolkit + RTK Query, next-intl, Bootstrap 5 (SCSS) + BEM, motion, react-hook-form + zod, socket.io-client |
+| api            | Express 5, Prisma 7, MySQL 8.4, TypeScript                                                                                                                          |
+| общий код      | `packages/shared`: схемы валидации, типы DTO, форматтеры                                                                                                            |
+| инфраструктура | Docker Compose, nginx-шлюз, GitHub Actions → GHCR → VPS                                                                                                             |
 
 ## Быстрый старт (Docker)
 
@@ -53,8 +53,9 @@ npm run dev
 ```
 
 `npm run dev` поднимает MySQL в Docker, собирает `packages/shared` и запускает api (http://localhost:4000)
-и web (http://localhost:3000) с перезагрузкой при изменениях. Next проксирует `/api` в api,
-поэтому браузер работает с одним origin, как на проде.
+и web (http://localhost:3000) с перезагрузкой при изменениях. Next проксирует `/api` и `/uploads` в
+api, поэтому браузер работает с одним origin, как на проде. Socket.io в разработке подключается к
+api напрямую (`NEXT_PUBLIC_SOCKET_URL`): прокси Next не пропускает websocket.
 
 ## Переменные окружения
 
@@ -76,8 +77,39 @@ npm run dev
 | `DEMO_EMAIL`, `DEMO_PASSWORD`  | демо-пользователь, которого создаёт сервис `migrate`                    |
 | `IMAGE_REGISTRY`, `IMAGE_TAG`  | откуда брать образы; деплой подставляет sha коммита                     |
 
-`apps/api/.env` и `apps/web/.env.local` нужны только для запуска с хоста: в них адрес MySQL на
-`127.0.0.1:3307` и адрес api для прокси Next.
+`apps/api/.env` и `apps/web/.env.local` нужны только для запуска с хоста:
+
+| Переменная web           | Назначение                                                       |
+| ------------------------ | ---------------------------------------------------------------- |
+| `API_INTERNAL_URL`       | куда ходит SSR (в Docker `http://api:4000`, с хоста `localhost`) |
+| `API_PROXY_URL`          | только разработка: куда Next проксирует `/api` и `/uploads`      |
+| `NEXT_PUBLIC_SOCKET_URL` | только разработка: адрес Socket.io; на проде тот же origin       |
+
+## Фронтенд
+
+Страницы: `/login`, `/register`, `/orders`, `/products`, `/groups`, `/users`, `/settings`. Русский —
+язык по умолчанию без префикса, английский — под `/en/...` (next-intl, типизированные сообщения в
+`apps/web/messages`).
+
+- **SSR и защита страниц.** `proxy.ts` пускает в приложение только с сессией и уводит уже вошедших
+  со страниц входа. Refresh-кука ограничена путём `/api/auth`, поэтому страницам виден лишь
+  безопасный признак `has_session`. Если access-токен истёк, layout на сервере получает 401 и
+  показывает `SessionRestore`: клиент обновляет сессию и перерисовывает ту же страницу без редиректа.
+- **Состояние.** Redux Toolkit: store создаётся на каждый запрос, пользователь приходит из SSR.
+  RTK Query ходит в REST через `fetch`; на 401 выполняется один общий refresh для всех параллельных
+  запросов и повтор запроса.
+- **Realtime и EDA.** `RealtimeBridge` держит соединение Socket.io: `sessions:count` обновляет
+  счётчик вкладок в TopMenu, доменные события превращаются в Redux-экшены, и listener-middleware
+  инвалидирует кеш RTK Query. Удаление в одной вкладке перезапрашивает данные в остальных.
+- **Формы.** react-hook-form с теми же zod-схемами из `packages/shared`, что проверяет сервер. Тексты
+  ошибок — ключи i18n; ошибки сервера переводятся по `code`.
+- **Стили.** Bootstrap 5 собирается из SCSS только из нужных частей и с цветами макета: npm-скрипт
+  `styles` (sass) запускается перед `dev` и `build`. Компоненты оформлены по БЭМ (`top-menu__aside`,
+  `nav-menu__link--active`), токены дизайна — CSS-переменные.
+- **Анимации** (motion): переход между разделами, подчёркивание активного пункта меню переезжает
+  между пунктами, смена числа в счётчике вкладок. Учитывается системная настройка
+  «уменьшить движение».
+- **Адаптив.** Ниже 992 px меню превращается в выезжающую панель (Bootstrap offcanvas).
 
 ## API
 
@@ -186,19 +218,20 @@ npm run test:api
 
 ## Скрипты
 
-| Команда              | Что делает                            |
-| -------------------- | ------------------------------------- |
-| `npm run dev`        | MySQL + api + web в режиме разработки |
-| `npm run build`      | сборка shared, api и web              |
-| `npm run lint`       | ESLint по всем пакетам                |
-| `npm run typecheck`  | проверка типов во всех пакетах        |
-| `npm run format`     | Prettier                              |
-| `npm run test`       | все тесты                             |
-| `npm run test:api`   | интеграционные тесты api              |
-| `npm run db:migrate` | создать миграцию по изменениям схемы  |
-| `npm run db:apply`   | применить миграции к базе разработки  |
-| `npm run db:seed`    | демо-пользователь и демо-данные       |
-| `npm run docker:up`  | весь стек в Docker                    |
+| Команда                       | Что делает                            |
+| ----------------------------- | ------------------------------------- |
+| `npm run dev`                 | MySQL + api + web в режиме разработки |
+| `npm run build`               | сборка shared, api и web              |
+| `npm run lint`                | ESLint по всем пакетам                |
+| `npm run typecheck`           | проверка типов во всех пакетах        |
+| `npm run format`              | Prettier                              |
+| `npm run test`                | все тесты                             |
+| `npm run test:api`            | интеграционные тесты api              |
+| `npm run db:migrate`          | создать миграцию по изменениям схемы  |
+| `npm run db:apply`            | применить миграции к базе разработки  |
+| `npm run db:seed`             | демо-пользователь и демо-данные       |
+| `npm run docker:up`           | весь стек в Docker                    |
+| `npm run styles -w @dzen/web` | пересобрать тему Bootstrap            |
 
 ## Деплой
 

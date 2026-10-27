@@ -1,12 +1,13 @@
 import { createHash, randomUUID } from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import type { CookieOptions, Request, Response } from 'express';
-import { AuthErrorCode, type UserRole } from '@dzen/shared';
+import { AuthCookie, AuthErrorCode, type UserRole } from '@dzen/shared';
 import { env } from '../config/env.js';
 import { AppError } from '../middleware/error.js';
 
-export const ACCESS_COOKIE = 'access_token';
-export const REFRESH_COOKIE = 'refresh_token';
+export const ACCESS_COOKIE = AuthCookie.Access;
+export const REFRESH_COOKIE = AuthCookie.Refresh;
+export const SESSION_HINT_COOKIE = AuthCookie.SessionHint;
 
 const ACCESS_PATH = '/';
 const REFRESH_PATH = '/api/auth';
@@ -102,11 +103,16 @@ export class TokenHelper {
       refreshToken,
       this.cookieOptions(REFRESH_PATH, this.config.refreshTtl),
     );
+    res.cookie(SESSION_HINT_COOKIE, '1', {
+      ...this.cookieOptions(ACCESS_PATH, this.config.refreshTtl),
+      httpOnly: false,
+    });
   }
 
   clearAuthCookies(res: Response): void {
     res.clearCookie(ACCESS_COOKIE, this.cookieOptions(ACCESS_PATH));
     res.clearCookie(REFRESH_COOKIE, this.cookieOptions(REFRESH_PATH));
+    res.clearCookie(SESSION_HINT_COOKIE, { ...this.cookieOptions(ACCESS_PATH), httpOnly: false });
   }
 
   readAccess(req: Request): string | null {

@@ -1,0 +1,83 @@
+{
+  "app": {
+    "name": "Inventory",
+    "title": "Inventory — orders and products",
+    "description": "Orders and products tracking"
+  },
+  "nav": {
+    "label": "Sections",
+    "orders": "Orders",
+    "groups": "Groups",
+    "products": "Products",
+    "users": "Users",
+    "settings": "Settings",
+    "open": "Open menu",
+    "close": "Close menu",
+    "profile": "Profile settings",
+    "skip": "Skip to content"
+  },
+  "topMenu": {
+    "home": "Home",
+    "search": "Search",
+    "sessions": "{count, plural, one {# app tab is open} other {# app tabs are open}}",
+    "sessionsOffline": "No connection to the server",
+    "logout": "Sign out",
+    "language": "Interface language"
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "registerTitle": "Sign up",
+    "subtitle": "Orders and products tracking",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "submitLogin": "Sign in",
+    "submitRegister": "Create account",
+    "demo": "Sign in as demo user",
+    "demoHint": "Demo access: {email} / {password}",
+    "noAccount": "No account yet?",
+    "toRegister": "Sign up",
+    "haveAccount": "Already have an account?",
+    "toLogin": "Sign in",
+    "restoring": "Restoring your session…",
+    "or": "or"
+  },
+  "validation": {
+    "required": "Required field",
+    "email": "Invalid email",
+    "emailMax": "At most {emailMax} characters",
+    "nameMax": "At most {nameMax} characters",
+    "passwordMin": "At least {passwordMin} characters",
+    "passwordMax": "At most {passwordMax} characters",
+    "tooLong": "Value is too long",
+    "number": "A number is required",
+    "positive": "Value must be greater than zero",
+    "tooLarge": "Value is too large",
+    "date": "Invalid date",
+    "guaranteeRange": "Warranty ends before it starts",
+    "photo": "Invalid photo path"
+  },
+  "errors": {
+    "INVALID_CREDENTIALS": "Wrong email or password",
+    "EMAIL_TAKEN": "This email is already registered",
+    "USER_INACTIVE": "This account is disabled",
+    "RATE_LIMITED": "Too many attempts, try again later",
+    "VALIDATION_FAILED": "Check the highlighted fields",
+    "UNAUTHORIZED": "Please sign in again",
+    "NETWORK": "No connection to the server",
+    "UNKNOWN": "Something went wrong, please try again",
+    "RETRY": "Reload page"
+  },
+  "pages": {
+    "orders": "Orders",
+    "products": "Products",
+    "groups": "Groups",
+    "users": "Users",
+    "settings": "Settings",
+    "soon": "This section is filled in the next steps"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "back": "Back to orders"
+  }
+}

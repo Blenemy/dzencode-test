@@ -92,6 +92,8 @@ services:
     environment:
       API_INTERNAL_URL: http://api:4000
       PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8080}
+      DEMO_EMAIL: ${DEMO_EMAIL:-demo@dzen.test}
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-demo12345}
     depends_on:
       api:
         condition: service_healthy

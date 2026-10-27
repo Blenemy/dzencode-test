@@ -5,7 +5,10 @@
   "description": "Next.js фронтенд: SSR, Redux, i18n",
   "type": "module",
   "scripts": {
+    "styles": "sass --load-path=../../node_modules --quiet-deps --silence-deprecation=import --silence-deprecation=global-builtin --silence-deprecation=color-functions --silence-deprecation=if-function --style=compressed --no-source-map src/styles/bootstrap.scss src/styles/generated/bootstrap.css",
+    "predev": "npm run styles",
     "dev": "next dev -p 3000",
+    "prebuild": "npm run styles",
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "eslint .",
@@ -13,14 +16,26 @@
   },
   "dependencies": {
     "@dzen/shared": "*",
+    "@hookform/resolvers": "^6.0.1",
+    "@reduxjs/toolkit": "^2.13.0",
+    "bootstrap": "^5.3.8",
+    "motion": "^14.7.1",
     "next": "16.4.3",
+    "next-intl": "^4.14.9",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "19.3.1",
+    "react-hook-form": "^7.91.0",
+    "react-redux": "^9.3.0",
+    "server-only": "^0.0.1",
+    "socket.io-client": "^4.8.4",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^22.19.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "eslint-config-next": "16.4.3"
+    "eslint-config-next": "16.4.3",
+    "sass": "^1.106.1"
   }
 }

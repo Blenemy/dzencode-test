@@ -26,3 +26,4 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+apps/web/src/styles/generated/

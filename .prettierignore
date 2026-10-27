@@ -7,3 +7,4 @@ e2e/test-results
 e2e/playwright-report
 db/*.mwb
 apps/web/next-env.d.ts
+apps/web/src/styles/generated

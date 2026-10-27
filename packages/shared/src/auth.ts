@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+export const AuthCookie = {
+  Access: 'access_token',
+  Refresh: 'refresh_token',
+  SessionHint: 'has_session',
+} as const;
+
 export const PASSWORD_MIN = 8;
 export const PASSWORD_MAX = 100;
 export const NAME_MAX = 100;
