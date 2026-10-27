@@ -13,7 +13,8 @@
     "settings": "Settings",
     "open": "Open menu",
     "close": "Close menu",
-    "profile": "Profile settings"
+    "profile": "Profile settings",
+    "skip": "Skip to content"
   },
   "topMenu": {
     "home": "Home",

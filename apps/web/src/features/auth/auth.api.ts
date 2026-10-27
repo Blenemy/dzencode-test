@@ -11,15 +11,15 @@ export const authApi = api.injectEndpoints({
     login: build.mutation<AuthUserResponse, LoginInput>({
       query: (body) => ({ url: '/auth/login', method: 'POST', body }),
       async onQueryStarted(_input, { dispatch, queryFulfilled }) {
-        const { data } = await queryFulfilled;
-        dispatch(userLoaded(data.user));
+        const result = await queryFulfilled.catch(() => null);
+        if (result) dispatch(userLoaded(result.data.user));
       },
     }),
     register: build.mutation<AuthUserResponse, RegisterInput>({
       query: (body) => ({ url: '/auth/register', method: 'POST', body }),
       async onQueryStarted(_input, { dispatch, queryFulfilled }) {
-        const { data } = await queryFulfilled;
-        dispatch(userLoaded(data.user));
+        const result = await queryFulfilled.catch(() => null);
+        if (result) dispatch(userLoaded(result.data.user));
       },
     }),
     logout: build.mutation<{ ok: boolean }, void>({

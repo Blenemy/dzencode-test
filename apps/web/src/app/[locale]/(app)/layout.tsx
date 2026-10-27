@@ -1,4 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
+import { AppShell } from '@/components/layout/AppShell';
 import { ServiceUnavailable } from '@/components/layout/ServiceUnavailable';
 import { SessionRestore } from '@/features/auth/SessionRestore';
 import { toAppLocale } from '@/i18n/routing';
@@ -20,5 +21,9 @@ export default async function AppLayout({ children, params }: LayoutProps<'/[loc
     );
   }
 
-  return <StoreProvider user={current.user}>{children}</StoreProvider>;
+  return (
+    <StoreProvider user={current.user}>
+      <AppShell>{children}</AppShell>
+    </StoreProvider>
+  );
 }
