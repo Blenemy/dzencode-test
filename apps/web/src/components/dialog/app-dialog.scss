@@ -142,12 +142,16 @@
 
   @media (max-width: 575.98px) {
     &__close {
-      top: -16px;
-      right: -6px;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      box-shadow: none;
+      background: var(--surface-muted);
     }
 
     &__header {
-      padding: 1.5rem 1.25rem 1rem;
+      padding: 1.5rem 3.75rem 1rem 1.25rem;
     }
 
     &__body {
