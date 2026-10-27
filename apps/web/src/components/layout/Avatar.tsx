@@ -10,7 +10,13 @@ function initials(name: string): string {
     .join('');
 }
 
-export function Avatar({ user, size = 96 }: { user: AuthUser; size?: number }) {
+export function Avatar({
+  user,
+  size = 96,
+}: {
+  user: Pick<AuthUser, 'name' | 'avatar'>;
+  size?: number;
+}) {
   return (
     <span className="avatar" style={{ width: size, height: size, fontSize: size * 0.34 }}>
       {user.avatar ? (

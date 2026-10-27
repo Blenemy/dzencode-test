@@ -172,6 +172,23 @@
     "retry": "Retry",
     "empty": "No data yet"
   },
+  "users": {
+    "title": "Users",
+    "map": "Warehouses on the map",
+    "mapHint": "Pick a warehouse on the map or in the list to see its staff",
+    "mapLabel": "Warehouse map",
+    "list": "Staff",
+    "filter": "Warehouse",
+    "all": "All warehouses",
+    "noWarehouse": "No warehouse",
+    "you": "You",
+    "productsCount": "{count, plural, one {# product} other {# products}}",
+    "usersCount": "{count, plural, one {# person} other {# people}}",
+    "ordersCount": "{count, plural, one {# order} other {# orders}}",
+    "empty": "Nobody here yet",
+    "loadFailed": "Could not load users",
+    "retry": "Retry"
+  },
   "deleteDialog": {
     "order": "Are you sure you want to delete this order?",
     "product": "Are you sure you want to delete this product?",
