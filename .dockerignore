@@ -1,0 +1,15 @@
+**/node_modules
+**/dist
+**/.next
+**/generated
+**/*.tsbuildinfo
+**/.env
+**/.env.*
+!**/.env.example
+**/*.log
+apps/api/uploads
+e2e
+db
+docs
+.git
+.github
