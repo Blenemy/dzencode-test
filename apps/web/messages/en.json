@@ -66,6 +66,7 @@
     "UNAUTHORIZED": "Please sign in again",
     "NETWORK": "No connection to the server",
     "UNKNOWN": "Something went wrong, please try again",
+    "NOT_FOUND": "This record has already been deleted",
     "RETRY": "Reload page"
   },
   "pages": {
@@ -75,6 +76,23 @@
     "users": "Users",
     "settings": "Settings",
     "soon": "This section is filled in the next steps"
+  },
+  "orders": {
+    "title": "Orders",
+    "products": "{count, plural, one {Product} other {Products}}",
+    "open": "Open order “{title}”",
+    "empty": "No orders yet",
+    "loadFailed": "Could not load orders",
+    "retry": "Retry",
+    "close": "Close order",
+    "noProducts": "This order has no products yet",
+    "detailsFailed": "Could not load the order"
+  },
+  "products": {
+    "status": {
+      "FREE": "Available",
+      "IN_REPAIR": "In repair"
+    }
   },
   "notFound": {
     "title": "Page not found",
