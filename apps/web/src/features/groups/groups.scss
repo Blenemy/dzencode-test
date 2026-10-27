@@ -36,8 +36,11 @@
     align-items: start;
   }
 
-  &__by-group {
-    grid-row: span 2;
+  &__side {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
   }
 
   &__wide {
@@ -58,10 +61,6 @@
   @media (max-width: 1199.98px) {
     &__grid {
       grid-template-columns: minmax(0, 1fr);
-    }
-
-    &__by-group {
-      grid-row: auto;
     }
   }
 
