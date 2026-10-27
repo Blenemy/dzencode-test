@@ -25,7 +25,10 @@ function markerIcon(usersCount: number, selected: boolean): L.DivIcon {
 }
 
 function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return (
+    document.documentElement.dataset.motion === 'reduced' ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 }
 
 function FocusSelection({

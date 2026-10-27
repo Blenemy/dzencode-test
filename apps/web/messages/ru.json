@@ -156,7 +156,7 @@
     "byStatus": "Статусы продуктов",
     "byType": "Продукты по типам",
     "byMonth": "Стоимость приходов по месяцам",
-    "byMonthHint": "Сумма цен продуктов в UAH по месяцу прихода",
+    "byMonthHint": "Сумма цен продуктов в {currency} по месяцу прихода",
     "ordersCount": "{count, plural, one {# приход} few {# прихода} many {# приходов} other {# прихода}}",
     "productsCount": "{count, plural, one {# продукт} few {# продукта} many {# продуктов} other {# продукта}}",
     "table": "Показать таблицей",

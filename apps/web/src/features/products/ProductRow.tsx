@@ -3,10 +3,10 @@
 import { useLocale, useTranslations } from 'next-intl';
 import type { ProductDto } from '@dzen/shared';
 import { TrashButton } from '@/components/buttons/TrashButton';
+import { MoneyPair } from '@/components/money/MoneyPair';
 import { deleteRequested } from '@/features/deletion/deletion.slice';
 import { Link } from '@/i18n/navigation';
 import { daySlashMonthSlashYear, monthOfYear, numericDate } from '@/lib/format-date';
-import { amountIn, formatAmount } from '@/lib/format-money';
 import { useAppDispatch } from '@/store/hooks';
 import { ProductStatus, ProductSummary } from './ProductSummary';
 
@@ -16,8 +16,6 @@ export function ProductRow({ product }: { product: ProductDto }) {
   const t = useTranslations('products');
   const locale = useLocale();
   const dispatch = useAppDispatch();
-  const usd = amountIn(product.price, 'USD');
-  const uah = amountIn(product.price, 'UAH');
 
   return (
     <tr className="product-row">
@@ -41,10 +39,7 @@ export function ProductRow({ product }: { product: ProductDto }) {
         {product.isNew ? t('condition.new') : t('condition.used')}
       </td>
       <td className="product-row__price" data-label={t('columns.price')}>
-        <span className="product-row__line product-row__muted">{formatAmount(usd)} $</span>
-        <span className="product-row__line">
-          {formatAmount(uah)} <span className="product-row__muted">UAH</span>
-        </span>
+        <MoneyPair amounts={product.price} />
       </td>
       <td className="product-row__group" data-label={t('columns.group')}>
         {product.group ? <span className="product-row__ref">{product.group.title}</span> : EMPTY}

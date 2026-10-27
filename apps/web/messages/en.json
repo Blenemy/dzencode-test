@@ -156,7 +156,7 @@
     "byStatus": "Product statuses",
     "byType": "Products by type",
     "byMonth": "Order value by month",
-    "byMonthHint": "Sum of product prices in UAH by order month",
+    "byMonthHint": "Sum of product prices in {currency} by order month",
     "ordersCount": "{count, plural, one {# order} other {# orders}}",
     "productsCount": "{count, plural, one {# product} other {# products}}",
     "table": "Show as table",
