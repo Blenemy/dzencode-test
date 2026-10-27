@@ -37,6 +37,7 @@ export function OrderRow({ order, compact, active }: OrderRowProps) {
       <Link
         href={`/orders/${order.id}`}
         scroll={false}
+        prefetch={false}
         className="order-row__link"
         aria-label={t('open', { title: order.title })}
         aria-current={active ? 'page' : undefined}
