@@ -269,3 +269,133 @@
     }
   }
 }
+
+.order-details {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  background: var(--surface);
+
+  &__close {
+    position: absolute;
+    top: -21px;
+    right: -21px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--surface);
+    box-shadow: 0 4px 14px rgba(61, 75, 85, 0.2);
+    color: var(--ink-muted);
+    transition:
+      transform 0.25s var(--ease-out),
+      color 0.2s var(--ease-out);
+
+    &:hover {
+      color: var(--ink);
+      transform: rotate(90deg);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    padding: 2.25rem 2.25rem 1.25rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: 0.03em;
+    color: var(--ink-strong);
+  }
+
+  &__products {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+  }
+
+  &__product {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 7.5rem 2rem;
+    align-items: center;
+    column-gap: 1.5rem;
+    min-height: 55px;
+    padding: 0.5rem 1.5rem 0.5rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    transition: box-shadow 0.25s var(--ease-out);
+
+    &:last-child {
+      border-bottom: 0;
+      border-radius: 0 0 0.25rem 0.25rem;
+    }
+
+    &:hover {
+      z-index: 1;
+      box-shadow: var(--shadow-raised);
+    }
+  }
+
+  &__empty {
+    margin: 0;
+    padding: 0 2.25rem 2rem;
+    color: var(--ink-muted);
+  }
+
+  &__error {
+    margin: 2.25rem;
+  }
+
+  &__skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 2.25rem;
+
+    .placeholder {
+      height: 1.25rem;
+      border-radius: 0.25rem;
+    }
+  }
+
+  @media (max-width: 1199.98px) {
+    flex-basis: 100%;
+  }
+
+  @media (max-width: 767.98px) {
+    &__close {
+      top: -16px;
+      right: -6px;
+    }
+
+    &__title {
+      padding: 1.5rem 1.25rem 1rem;
+      font-size: 1.0625rem;
+    }
+
+    &__product {
+      grid-template-columns: minmax(0, 1fr) 2rem;
+      row-gap: 0.25rem;
+      padding: 0.75rem 1rem;
+
+      .product-status {
+        grid-column: 1;
+        padding-left: calc(9px + 56px + 1.7rem);
+        font-size: 0.8125rem;
+      }
+    }
+  }
+}
