@@ -39,3 +39,10 @@ export const api = createApi({
   tagTypes: ['Me', 'Orders', 'Products', 'Catalog', 'Stats'],
   endpoints: () => ({}),
 });
+
+export function succeeded(promise: Promise<unknown>): Promise<boolean> {
+  return promise.then(
+    () => true,
+    () => false,
+  );
+}

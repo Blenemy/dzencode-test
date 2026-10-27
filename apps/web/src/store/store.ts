@@ -1,10 +1,11 @@
 import { combineSlices, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
+import { deletionSlice } from '@/features/deletion/deletion.slice';
 import { api } from './api';
 import { authSlice, loggedOut } from './auth.slice';
 import { listenToInventoryEvents } from './realtime';
 import { sessionsSlice } from './sessions.slice';
 
-const rootReducer = combineSlices(api, authSlice, sessionsSlice);
+const rootReducer = combineSlices(api, authSlice, sessionsSlice, deletionSlice);
 
 export type RootState = ReturnType<typeof rootReducer>;
 

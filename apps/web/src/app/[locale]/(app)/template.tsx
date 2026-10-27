@@ -1,16 +1,11 @@
 'use client';
 
-import { useEffect, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { motion } from 'motion/react';
-
-let hasNavigated = false;
+import { useEntranceAnimation } from '@/lib/use-entrance';
 
 export default function AppTemplate({ children }: { children: ReactNode }) {
-  const animate = hasNavigated;
-
-  useEffect(() => {
-    hasNavigated = true;
-  }, []);
+  const animate = useEntranceAnimation();
 
   return (
     <motion.div
