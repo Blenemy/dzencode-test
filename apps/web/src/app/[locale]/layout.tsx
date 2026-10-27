@@ -36,7 +36,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} className={montserrat.variable}>
+    <html lang={locale} className={montserrat.variable} data-scroll-behavior="smooth">
       <body>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>

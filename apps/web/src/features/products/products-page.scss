@@ -181,3 +181,64 @@
     }
   }
 }
+
+.product-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 2rem;
+
+  &__field {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    white-space: nowrap;
+  }
+
+  &__select {
+    width: 230px;
+    height: 32px;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-color: #d4dbe0;
+    background-color: var(--surface);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-strong);
+  }
+
+  &__reset {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--brand-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover {
+      color: var(--ink-strong);
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    width: 100%;
+
+    &__field {
+      flex: 1 1 100%;
+      justify-content: space-between;
+    }
+
+    &__select {
+      flex: 1 1 auto;
+      width: auto;
+      max-width: 70%;
+    }
+  }
+}

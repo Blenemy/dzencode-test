@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Icon } from '@/components/icons/Icon';
+import { useSavedProductFilters } from '@/features/products/saved-filters';
 import { Link, usePathname } from '@/i18n/navigation';
 import { useAppSelector } from '@/store/hooks';
 import { selectUser } from '@/store/auth.slice';
@@ -20,6 +21,7 @@ export function NavigationMenu({ open, onClose }: NavigationMenuProps) {
   const t = useTranslations('nav');
   const pathname = usePathname();
   const user = useAppSelector(selectUser);
+  const productFilters = useSavedProductFilters();
 
   return (
     <Offcanvas
@@ -50,10 +52,12 @@ export function NavigationMenu({ open, onClose }: NavigationMenuProps) {
           {SECTIONS.map((section) => {
             const href = `/${section}`;
             const active = pathname === href || pathname.startsWith(`${href}/`);
+            const target =
+              section === 'products' && productFilters ? `${href}?${productFilters}` : href;
             return (
               <Link
                 key={section}
-                href={href}
+                href={target}
                 onClick={onClose}
                 aria-current={active ? 'page' : undefined}
                 className={`nav-menu__link${active ? ' nav-menu__link--active' : ''}`}
