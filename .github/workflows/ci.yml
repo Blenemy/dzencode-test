@@ -35,3 +35,42 @@ jobs:
 
       - name: Сборка
         run: npm run build
+
+  api-tests:
+    name: API integration tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: inventory_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=30
+
+    env:
+      TEST_DATABASE_URL: mysql://root:root@127.0.0.1:3306/inventory_test?allowPublicKeyRetrieval=true
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Собрать shared
+        run: npm run build -w @dzen/shared
+
+      - name: Тесты api
+        run: npm run test:api
