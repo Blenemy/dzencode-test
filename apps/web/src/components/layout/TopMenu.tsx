@@ -24,7 +24,11 @@ export function TopMenu({ onOpenNavigation }: { onOpenNavigation: () => void }) 
         <Icon name="menu" size={22} />
       </button>
 
-      <Link href="/orders" className="top-menu__brand" aria-label={t('topMenu.home')}>
+      <Link
+        href="/orders"
+        className="top-menu__brand"
+        aria-label={`Inventory — ${t('topMenu.home')}`}
+      >
         <Logo />
       </Link>
 

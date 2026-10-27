@@ -47,7 +47,7 @@ export function Pagination({ page, pageCount, hrefFor, onChange }: PaginationPro
     return (
       <li className={cx('page-item', disabled && 'disabled')}>
         {disabled ? (
-          <span className="page-link" aria-label={label}>
+          <span className="page-link" aria-hidden="true">
             <Icon name={icon} size={12} />
           </span>
         ) : (
