@@ -1,0 +1,253 @@
+.users {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    min-height: 40px;
+    margin-bottom: 2rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--ink-strong);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  &__empty {
+    margin: 0;
+    padding: 1.5rem 0;
+    color: var(--ink-muted);
+  }
+
+  @media (max-width: 1199.98px) {
+    &__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 991.98px) {
+    &__header {
+      margin-bottom: 1.25rem;
+    }
+
+    &__title {
+      font-size: 1.375rem;
+    }
+  }
+}
+
+.warehouse-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 34px;
+    padding: 0 0.6rem 0 0.95rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink);
+    transition:
+      background-color 0.2s var(--ease-out),
+      border-color 0.2s var(--ease-out),
+      color 0.2s var(--ease-out);
+
+    &:hover {
+      border-color: #c5d3db;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
+
+    &--active {
+      border-color: #689f38;
+      background: #689f38;
+      color: var(--surface);
+    }
+  }
+
+  &__count {
+    min-width: 22px;
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    background: var(--surface-muted);
+    font-size: 0.75rem;
+    text-align: center;
+    color: var(--ink);
+  }
+
+  &__chip--active &__count {
+    background: rgba(255, 255, 255, 0.22);
+    color: var(--surface);
+  }
+}
+
+.warehouse-map {
+  overflow: hidden;
+  border-radius: 0.25rem;
+
+  .leaflet-container {
+    font-family: inherit;
+    background: var(--surface-muted);
+  }
+
+  .leaflet-popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin: 0.75rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--ink);
+  }
+
+  &__canvas {
+    height: 420px;
+
+    @media (max-width: 575.98px) {
+      height: 320px;
+    }
+  }
+
+  &__name {
+    font-size: 0.875rem;
+    color: var(--ink-strong);
+  }
+
+  &__address,
+  &__stats {
+    color: var(--ink-muted);
+  }
+}
+
+.map-marker {
+  &__pin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--surface);
+    border-radius: 50%;
+    background: #689f38;
+    box-shadow: 0 4px 12px rgba(47, 59, 68, 0.3);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--surface);
+    transition:
+      background-color 0.2s var(--ease-out),
+      transform 0.2s var(--ease-out);
+  }
+
+  &:hover &__pin {
+    transform: scale(1.08);
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    .map-marker__pin {
+      outline: 2px solid var(--ink-strong);
+      outline-offset: 2px;
+    }
+  }
+
+  &--selected &__pin {
+    background: var(--ink-strong);
+    font-size: 0.9375rem;
+  }
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink-strong);
+  }
+
+  &__badge {
+    padding: 0.05rem 0.45rem;
+    border-radius: 999px;
+    background: var(--brand-soft);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--brand-dark);
+  }
+
+  &__email {
+    overflow: hidden;
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__meta {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+    font-size: 0.8125rem;
+  }
+
+  &__warehouse {
+    color: var(--ink);
+  }
+
+  &__products {
+    color: var(--ink-muted);
+  }
+
+  .avatar {
+    flex-shrink: 0;
+    box-shadow: none;
+  }
+}
