@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
+import { MotionConfig } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { SessionWatcher } from '@/features/auth/SessionWatcher';
 import { RealtimeBridge } from '@/features/realtime/RealtimeBridge';
@@ -13,17 +14,19 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [navigationOpen, setNavigationOpen] = useState(false);
 
   return (
-    <div className="app-shell">
-      <RealtimeBridge />
-      <SessionWatcher />
-      <a className="visually-hidden-focusable app-shell__skip" href="#main">
-        {t('skip')}
-      </a>
-      <TopMenu onOpenNavigation={() => setNavigationOpen(true)} />
-      <NavigationMenu open={navigationOpen} onClose={() => setNavigationOpen(false)} />
-      <main id="main" className="app-shell__main">
-        {children}
-      </main>
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="app-shell">
+        <RealtimeBridge />
+        <SessionWatcher />
+        <a className="visually-hidden-focusable app-shell__skip" href="#main">
+          {t('skip')}
+        </a>
+        <TopMenu onOpenNavigation={() => setNavigationOpen(true)} />
+        <NavigationMenu open={navigationOpen} onClose={() => setNavigationOpen(false)} />
+        <main id="main" className="app-shell__main">
+          {children}
+        </main>
+      </div>
+    </MotionConfig>
   );
 }
