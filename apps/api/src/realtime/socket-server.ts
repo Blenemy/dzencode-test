@@ -8,6 +8,7 @@ import {
   type ClientToServerEvents,
   type ServerToClientEvents,
 } from '@dzen/shared';
+import type { EventBus } from '../events/bus.js';
 import { logger } from '../lib/logger.js';
 import { ACCESS_COOKIE, type TokenHelper } from '../lib/tokens.js';
 import { AppError } from '../middleware/error.js';
@@ -21,6 +22,7 @@ type RealtimeSocket = Socket<ClientToServerEvents, ServerToClientEvents, never, 
 
 export interface RealtimeOptions {
   tokens: TokenHelper;
+  events: EventBus;
   allowedOrigins: string[];
 }
 
@@ -68,10 +70,15 @@ export function createRealtimeServer(httpServer: HttpServer, options: RealtimeOp
     });
   });
 
+  const stopForwarding = options.events.subscribeAll((event) => {
+    io.emit(SocketEvent.Inventory, event);
+  });
+
   return {
     io,
     activeSessions,
     async close(): Promise<void> {
+      stopForwarding();
       await io.close();
     },
   };

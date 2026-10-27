@@ -2,13 +2,14 @@ import { createServer } from 'node:http';
 import { createApp } from './app.js';
 import { corsOrigins, env } from './config/env.js';
 import { logger } from './lib/logger.js';
-import { disconnectApi } from './lib/container.js';
+import { disconnectApi, eventBus } from './lib/container.js';
 import { tokenHelper } from './lib/tokens.js';
 import { createRealtimeServer } from './realtime/socket-server.js';
 
 const server = createServer(createApp());
 const realtime = createRealtimeServer(server, {
   tokens: tokenHelper,
+  events: eventBus,
   allowedOrigins: corsOrigins,
 });
 
