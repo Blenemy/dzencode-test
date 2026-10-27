@@ -1,4 +1,4 @@
-import { loginSchema, registerSchema } from '@dzen/shared';
+import { loginSchema, registerSchema, updateProfileSchema } from '@dzen/shared';
 import {
   jsonBody,
   jsonError,
@@ -94,6 +94,29 @@ export function registerAuthDocs(): void {
       security: [{ accessCookie: [] }],
       responses: {
         '200': jsonResponse('Пользователь', 'AuthUserResponse'),
+        '401': jsonError('UNAUTHORIZED, TOKEN_INVALID, TOKEN_EXPIRED'),
+      },
+    },
+    patch: {
+      tags: ['auth'],
+      summary: 'Изменить имя и аватар (аватар — путь из POST /uploads или null)',
+      security: [{ accessCookie: [] }],
+      requestBody: jsonBody(updateProfileSchema),
+      responses: {
+        '200': jsonResponse('Обновлённый пользователь', 'AuthUserResponse'),
+        '400': jsonError('VALIDATION_FAILED'),
+        '401': jsonError('UNAUTHORIZED, TOKEN_INVALID, TOKEN_EXPIRED'),
+      },
+    },
+  });
+
+  registerPath('/auth/sessions', {
+    delete: {
+      tags: ['auth'],
+      summary: 'Выйти на всех устройствах: отзывает все refresh-токены и стирает куки',
+      security: [{ accessCookie: [] }],
+      responses: {
+        '200': { description: 'Готово' },
         '401': jsonError('UNAUTHORIZED, TOKEN_INVALID, TOKEN_EXPIRED'),
       },
     },

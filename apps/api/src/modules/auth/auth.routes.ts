@@ -6,7 +6,12 @@ import { tokenHelper } from '../../lib/tokens.js';
 import { currentUser, requireAuth } from '../../middleware/auth.js';
 import { AppError } from '../../middleware/error.js';
 import { loginRateLimit, registerRateLimit } from '../../middleware/rate-limit.js';
-import { loginSchema, registerSchema, type SessionMeta } from './auth.schema.js';
+import {
+  loginSchema,
+  registerSchema,
+  updateProfileSchema,
+  type SessionMeta,
+} from './auth.schema.js';
 
 export const authRouter: Router = Router();
 
@@ -62,4 +67,16 @@ authRouter.post('/auth/logout', async (req, res) => {
 authRouter.get('/auth/me', requireAuth, async (req, res) => {
   const user = await authService.me(currentUser(req).id);
   res.status(200).json({ user } satisfies AuthUserResponse);
+});
+
+authRouter.patch('/auth/me', requireAuth, async (req, res) => {
+  const input = parseOrThrow(updateProfileSchema, req.body);
+  const user = await authService.updateProfile(currentUser(req).id, input);
+  res.status(200).json({ user } satisfies AuthUserResponse);
+});
+
+authRouter.delete('/auth/sessions', requireAuth, async (req, res) => {
+  await authService.logoutEverywhere(currentUser(req).id);
+  tokenHelper.clearAuthCookies(res);
+  res.status(200).json({ ok: true });
 });

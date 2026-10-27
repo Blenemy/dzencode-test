@@ -161,6 +161,53 @@ describe('GET /api/auth/me', () => {
   });
 });
 
+describe('PATCH /api/auth/me', () => {
+  it('updates the name and avatar and rejects foreign avatar paths', async () => {
+    const access = cookieValue(await register(), 'access_token');
+    const patch = (body: object) =>
+      request(app)
+        .patch('/api/auth/me')
+        .set('Origin', TEST_ORIGIN)
+        .set('Cookie', `access_token=${access}`)
+        .send(body);
+
+    const res = await patch({ name: '  Новое Имя ', avatar: '/uploads/face.webp' });
+    expect(res.status).toBe(200);
+    expect(res.body.user).toMatchObject({ name: 'Новое Имя', avatar: '/uploads/face.webp' });
+
+    const invalid = await patch({ name: 'Имя', avatar: 'https://evil.example/x.png' });
+    expect(invalid.status).toBe(400);
+    expect(invalid.body.error.details.issues).toEqual([
+      { field: 'avatar', message: 'validation.photo' },
+    ]);
+  });
+});
+
+describe('DELETE /api/auth/sessions', () => {
+  it('revokes every refresh token of the user', async () => {
+    const first = await register();
+    const access = cookieValue(first, 'access_token');
+    const firstRefresh = cookieValue(first, 'refresh_token');
+    const secondRefresh = cookieValue(
+      await post('/api/auth/login').send({
+        email: credentials.email,
+        password: credentials.password,
+      }),
+      'refresh_token',
+    );
+
+    const res = await request(app)
+      .delete('/api/auth/sessions')
+      .set('Origin', TEST_ORIGIN)
+      .set('Cookie', `access_token=${access}`);
+    expect(res.status).toBe(200);
+    expect(readCookies(res).get('refresh_token')?.value).toBe('');
+
+    expect((await refreshWith(firstRefresh)).status).toBe(401);
+    expect((await refreshWith(secondRefresh)).status).toBe(401);
+  });
+});
+
 describe('POST /api/auth/refresh', () => {
   it('rotates the refresh token', async () => {
     const first = cookieValue(await register(), 'refresh_token');

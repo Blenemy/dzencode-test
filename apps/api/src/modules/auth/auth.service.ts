@@ -11,6 +11,7 @@ import {
   type LoginInput,
   type RegisterInput,
   type SessionMeta,
+  type UpdateProfileInput,
 } from './auth.schema.js';
 
 const DUMMY_HASH = await hash('no-such-user-placeholder');
@@ -214,6 +215,21 @@ export class AuthService {
     }
 
     throw new AppError(outcome.status, outcome.code, outcome.message);
+  }
+
+  async updateProfile(userId: number, input: UpdateProfileInput): Promise<AuthIdentity> {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { name: input.name, avatar: input.avatar },
+      select: publicUserSelect,
+    });
+  }
+
+  async logoutEverywhere(userId: number): Promise<void> {
+    await this.prisma.refreshToken.updateMany({
+      where: { userId, revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
   }
 
   async logout(token: string): Promise<void> {
