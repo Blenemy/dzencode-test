@@ -1,0 +1,36 @@
+# зависимости
+node_modules/
+
+# сборка
+dist/
+.next/
+out/
+*.tsbuildinfo
+
+# сгенерированный клиент Prisma (npm install генерирует его заново)
+apps/api/src/generated/
+
+# окружение
+.env
+.env.local
+.env.*.local
+
+# загруженные файлы в разработке
+apps/api/uploads/
+
+# тесты
+e2e/test-results/
+e2e/playwright-report/
+coverage/
+
+# логи
+*.log
+npm-debug.log*
+
+# редакторы и ОС
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+next-env.d.ts
