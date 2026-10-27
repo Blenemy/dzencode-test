@@ -63,7 +63,8 @@
     "VALIDATION_FAILED": "Check the highlighted fields",
     "UNAUTHORIZED": "Please sign in again",
     "NETWORK": "No connection to the server",
-    "UNKNOWN": "Something went wrong, please try again"
+    "UNKNOWN": "Something went wrong, please try again",
+    "RETRY": "Reload page"
   },
   "pages": {
     "orders": "Orders",

@@ -3,7 +3,7 @@ import { Montserrat } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { routing } from '@/i18n/routing';
+import { routing, toAppLocale } from '@/i18n/routing';
 import '@/styles/generated/bootstrap.css';
 import '@/styles/globals.scss';
 
@@ -19,9 +19,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: LayoutProps<'/[locale]'>): Promise<Metadata> {
-  const { locale } = await params;
   const t = await getTranslations({
-    locale: hasLocale(routing.locales, locale) ? locale : routing.defaultLocale,
+    locale: toAppLocale((await params).locale),
     namespace: 'app',
   });
 

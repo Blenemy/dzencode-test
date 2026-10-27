@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.resolve(process.cwd(), '../..'),
   poweredByHeader: false,
   reactStrictMode: true,
+  agentRules: false,
 
   experimental: {
     optimizePackageImports: ['react-bootstrap'],

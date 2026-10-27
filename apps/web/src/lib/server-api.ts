@@ -22,10 +22,10 @@ export async function serverGet<T>(path: string): Promise<ServerResult<T>> {
 }
 
 export type CurrentUser =
-  { state: 'authenticated'; user: AuthUser } | { state: 'expired' } | { state: 'anonymous' };
+  { state: 'authenticated'; user: AuthUser } | { state: 'expired' } | { state: 'unavailable' };
 
 export async function getCurrentUser(): Promise<CurrentUser> {
   const result = await serverGet<AuthUserResponse>('/auth/me');
   if (result.ok) return { state: 'authenticated', user: result.data.user };
-  return result.status === 401 ? { state: 'expired' } : { state: 'anonymous' };
+  return result.status === 401 ? { state: 'expired' } : { state: 'unavailable' };
 }
