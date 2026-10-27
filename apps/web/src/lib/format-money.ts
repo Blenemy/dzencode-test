@@ -12,6 +12,6 @@ export function formatAmount(value: number): string {
   return formatter.format(rounded).replace(/,/g, ' ');
 }
 
-export function totalIn(totals: CurrencyTotal[], symbol: Currency): number {
-  return totals.find((total) => total.symbol === symbol)?.value ?? 0;
+export function amountIn(amounts: CurrencyTotal[], symbol: Currency): number {
+  return amounts.find((amount) => amount.symbol === symbol)?.value ?? 0;
 }
