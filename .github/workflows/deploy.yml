@@ -1,0 +1,110 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io/blenemy
+
+jobs:
+  ci:
+    name: Проверки
+    uses: ./.github/workflows/ci.yml
+
+  images:
+    name: Образ ${{ matrix.app }}
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        app: [api, web]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/${{ matrix.app }}/Dockerfile
+          target: runtime
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/dzen-inventory-${{ matrix.app }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/dzen-inventory-${{ matrix.app }}:latest
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app }}
+
+  deploy:
+    name: Обновить сервер
+    needs: images
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Выкатить и проверить
+        uses: appleboy/ssh-action@v1
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: IMAGE_TAG,GHCR_USER,GHCR_TOKEN
+          command_timeout: 10m
+          script: |
+            set -euo pipefail
+            cd /opt/dzen-inventory
+
+            git fetch --prune origin main
+            git reset --hard origin/main
+
+            export IMAGE_TAG
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            docker compose pull --quiet
+            docker logout ghcr.io
+
+            docker compose up -d --no-build --remove-orphans
+            docker image prune -f
+
+            echo "Жду, пока приложение ответит…"
+            ok=""
+            for i in $(seq 1 45); do
+              if curl -fsS -m 5 https://dzen.topchyidev.shop/api/health > /tmp/dzen-health.json 2>/dev/null; then
+                ok=1
+                break
+              fi
+              sleep 2
+            done
+
+            if [ -z "$ok" ]; then
+              echo "Приложение не ответило за 90 секунд. Состояние на сервере:"
+              docker compose ps -a
+              echo "--- последние логи ---"
+              docker compose logs --tail 50
+              exit 1
+            fi
+
+            cat /tmp/dzen-health.json
+            echo ""
+            echo "Деплой завершён: $(git rev-parse --short HEAD)"
