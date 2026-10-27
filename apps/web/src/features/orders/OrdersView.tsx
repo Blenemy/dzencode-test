@@ -2,14 +2,23 @@
 
 import type { ReactNode } from 'react';
 import { AnimatePresence } from 'motion/react';
+import dynamic from 'next/dynamic';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ListResponse, OrderSummaryDto } from '@dzen/shared';
+import { AddButton } from '@/components/buttons/AddButton';
+import { useDialog } from '@/components/dialog/use-dialog';
+import { useRouter } from '@/i18n/navigation';
 import { cx } from '@/lib/cx';
 import { useErrorMessage } from '@/lib/use-messages';
 import { useHydrateOrders, useOrdersQuery } from './orders.api';
 import { OrderRow } from './OrderRow';
 import './orders.scss';
+
+const CreateOrderDialog = dynamic(
+  () => import('./CreateOrderDialog').then((module) => module.CreateOrderDialog),
+  { ssr: false },
+);
 
 const SKELETON_ROWS = 4;
 
@@ -30,10 +39,13 @@ export function OrdersView({ initial, children }: OrdersViewProps) {
   const activeId = toOrderId(useSelectedLayoutSegment());
   const { data, error, isLoading, isFetching, refetch } = useOrdersQuery();
   const compact = activeId !== null;
+  const router = useRouter();
+  const createDialog = useDialog();
 
   return (
     <section className={cx('orders', compact && 'orders--details')} aria-labelledby="orders-title">
       <header className="orders__header">
+        <AddButton label={t('create')} onClick={createDialog.open} />
         <h1 id="orders-title" className="orders__title">
           {t('title')} <span className="orders__total">/ {data ? data.total : '…'}</span>
         </h1>
@@ -87,6 +99,18 @@ export function OrdersView({ initial, children }: OrdersViewProps) {
 
         {children}
       </div>
+
+      {createDialog.mounted && (
+        <CreateOrderDialog
+          show={createDialog.show}
+          onHide={createDialog.close}
+          onExited={createDialog.exited}
+          onCreated={(order) => {
+            createDialog.close();
+            router.push(`/orders/${order.id}`, { scroll: false });
+          }}
+        />
+      )}
     </section>
   );
 }

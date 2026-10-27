@@ -1,8 +1,7 @@
 'use client';
 
-import Modal from 'react-bootstrap/Modal';
 import { useTranslations } from 'next-intl';
-import { Icon } from '@/components/icons/Icon';
+import { AppDialog, DialogActions } from '@/components/dialog/AppDialog';
 import { useDeleteOrderMutation, useOrderQuery } from '@/features/orders/orders.api';
 import { useDeleteProductMutation } from '@/features/products/products.api';
 import { ProductSummary } from '@/features/products/ProductSummary';
@@ -53,36 +52,15 @@ export function DeleteDialog({ target }: { target: DeleteTarget }) {
   };
 
   return (
-    <Modal
+    <AppDialog
       show={open}
       onHide={close}
       onExited={() => dispatch(deleteDialogExited())}
-      centered
-      size="lg"
-      backdrop={pending ? 'static' : true}
-      keyboard={!pending}
-      dialogClassName="delete-dialog"
-      contentClassName="delete-dialog__content"
-      aria-labelledby="delete-dialog-title"
+      title={t(target.kind)}
+      subtitle={target.kind === 'order' ? target.order.title : undefined}
+      closeLabel={t('close')}
+      busy={pending}
     >
-      <button
-        type="button"
-        className="delete-dialog__close"
-        aria-label={t('close')}
-        title={t('close')}
-        onClick={close}
-        disabled={pending}
-      >
-        <Icon name="close" size={14} />
-      </button>
-
-      <div className="delete-dialog__header">
-        <h2 id="delete-dialog-title" className="delete-dialog__title">
-          {t(target.kind)}
-        </h2>
-        {target.kind === 'order' && <p className="delete-dialog__subject">{target.order.title}</p>}
-      </div>
-
       {products ? (
         products.length > 0 ? (
           <ul className="delete-dialog__products">
@@ -111,25 +89,15 @@ export function DeleteDialog({ target }: { target: DeleteTarget }) {
         </div>
       )}
 
-      <div className="delete-dialog__footer">
-        <button type="button" className="delete-dialog__cancel" onClick={close} disabled={pending}>
-          {t('cancel')}
-        </button>
-        <button
-          type="button"
-          className="delete-dialog__confirm"
-          onClick={confirm}
-          disabled={pending}
-          aria-busy={pending}
-        >
-          {pending ? (
-            <span className="spinner-border spinner-border-sm" aria-hidden="true" />
-          ) : (
-            <Icon name="trash" size={14} />
-          )}
-          {t('confirm')}
-        </button>
-      </div>
-    </Modal>
+      <DialogActions
+        cancelLabel={t('cancel')}
+        confirmLabel={t('confirm')}
+        icon="trash"
+        onCancel={close}
+        onConfirm={confirm}
+        busy={pending}
+        danger
+      />
+    </AppDialog>
   );
 }

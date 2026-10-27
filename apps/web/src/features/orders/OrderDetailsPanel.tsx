@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import type { OrderDetailsDto } from '@dzen/shared';
+import { AddButton } from '@/components/buttons/AddButton';
 import { TrashButton } from '@/components/buttons/TrashButton';
+import { useDialog } from '@/components/dialog/use-dialog';
 import { Icon } from '@/components/icons/Icon';
 import { deleteRequested } from '@/features/deletion/deletion.slice';
 import { ProductStatus, ProductSummary } from '@/features/products/ProductSummary';
@@ -14,6 +17,12 @@ import { useEntranceAnimation } from '@/lib/use-entrance';
 import { useErrorMessage } from '@/lib/use-messages';
 import { useAppDispatch } from '@/store/hooks';
 import { useHydrateOrder, useOrderQuery } from './orders.api';
+
+const CreateProductDialog = dynamic(
+  () =>
+    import('@/features/products/CreateProductDialog').then((module) => module.CreateProductDialog),
+  { ssr: false },
+);
 
 const HIDDEN = { opacity: 0, x: 48 };
 const SHOWN = { opacity: 1, x: 0 };
@@ -33,6 +42,7 @@ export function OrderDetailsPanel({ id, initial }: OrderDetailsPanelProps) {
   const router = useRouter();
   const animateEntrance = useEntranceAnimation();
   const [closing, setClosing] = useState(false);
+  const productDialog = useDialog();
   const { data, error, isFetching, refetch } = useOrderQuery(id);
   const gone = errorStatus(error) === 404;
   const titleId = `order-${id}-title`;
@@ -67,6 +77,9 @@ export function OrderDetailsPanel({ id, initial }: OrderDetailsPanelProps) {
           <h2 id={titleId} className="order-details__title">
             {data.title}
           </h2>
+          <div className="order-details__toolbar">
+            <AddButton withText label={t('addProduct')} onClick={productDialog.open} />
+          </div>
 
           {data.products.length === 0 ? (
             <p className="order-details__empty">{t('noProducts')}</p>
@@ -113,6 +126,16 @@ export function OrderDetailsPanel({ id, initial }: OrderDetailsPanelProps) {
             <span key={index} className="placeholder col-12" />
           ))}
         </div>
+      )}
+
+      {productDialog.mounted && data && (
+        <CreateProductDialog
+          show={productDialog.show}
+          onHide={productDialog.close}
+          onExited={productDialog.exited}
+          onCreated={productDialog.close}
+          order={{ id: data.id, title: data.title }}
+        />
       )}
     </motion.section>
   );

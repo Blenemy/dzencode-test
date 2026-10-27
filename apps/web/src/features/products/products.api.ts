@@ -1,4 +1,10 @@
-import type { PageResponse, ProductDto, ProductTypeDto } from '@dzen/shared';
+import type {
+  CreateProductData,
+  PageResponse,
+  ProductDto,
+  ProductTypeDto,
+  UploadResult,
+} from '@dzen/shared';
 import { catalogApi } from '@/features/catalog/catalog.api';
 import { ordersApi } from '@/features/orders/orders.api';
 import { api, succeeded } from '@/store/api';
@@ -15,6 +21,23 @@ export const productsApi = api.injectEndpoints({
     products: build.query<PageResponse<ProductDto>, ProductsArgs>({
       query: (args) => productsApiPath(args),
       providesTags: [{ type: 'Products', id: 'LIST' }],
+    }),
+    createProduct: build.mutation<ProductDto, CreateProductData>({
+      query: (body) => ({ url: '/products', method: 'POST', body }),
+      invalidatesTags: (product) => [
+        { type: 'Orders', id: 'LIST' },
+        ...(product ? [{ type: 'Orders' as const, id: product.order.id }] : []),
+        'Products',
+        'Stats',
+        'Catalog',
+      ],
+    }),
+    uploadImage: build.mutation<UploadResult, File>({
+      query: (file) => {
+        const body = new FormData();
+        body.append('file', file);
+        return { url: '/uploads', method: 'POST', body };
+      },
     }),
     deleteProduct: build.mutation<void, DeleteProductArgs>({
       query: ({ id }) => ({ url: `/products/${id}`, method: 'DELETE' }),
@@ -47,7 +70,12 @@ export const productsApi = api.injectEndpoints({
   }),
 });
 
-export const { useProductsQuery, useDeleteProductMutation } = productsApi;
+export const {
+  useProductsQuery,
+  useCreateProductMutation,
+  useUploadImageMutation,
+  useDeleteProductMutation,
+} = productsApi;
 
 export interface ProductsPageData {
   products: PageResponse<ProductDto> | null;

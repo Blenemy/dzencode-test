@@ -1,4 +1,4 @@
-import type { ListResponse, OrderDetailsDto, OrderSummaryDto } from '@dzen/shared';
+import type { CreateOrderData, ListResponse, OrderDetailsDto, OrderSummaryDto } from '@dzen/shared';
 import { api, succeeded } from '@/store/api';
 import { useHydrateOnce } from '@/store/hydrate';
 
@@ -14,6 +14,10 @@ export const ordersApi = api.injectEndpoints({
     order: build.query<OrderDetailsDto, number>({
       query: (id) => `/orders/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Orders', id }],
+    }),
+    createOrder: build.mutation<OrderSummaryDto, CreateOrderData>({
+      query: (body) => ({ url: '/orders', method: 'POST', body }),
+      invalidatesTags: [{ type: 'Orders', id: 'LIST' }, 'Stats', 'Catalog'],
     }),
     deleteOrder: build.mutation<void, number>({
       query: (id) => ({ url: `/orders/${id}`, method: 'DELETE' }),
@@ -31,7 +35,8 @@ export const ordersApi = api.injectEndpoints({
   }),
 });
 
-export const { useOrdersQuery, useOrderQuery, useDeleteOrderMutation } = ordersApi;
+export const { useOrdersQuery, useOrderQuery, useCreateOrderMutation, useDeleteOrderMutation } =
+  ordersApi;
 
 export function useHydrateOrders(orders: ListResponse<OrderSummaryDto> | null): void {
   useHydrateOnce((store) => {

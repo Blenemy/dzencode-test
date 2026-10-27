@@ -68,3 +68,7 @@ export function numericDate(date: DateInput, timeZone = 'UTC'): string {
   const { day, month, year } = parts(date, timeZone);
   return `${pad(day)} / ${pad(month)} / ${year}`;
 }
+
+export function toDateInputValue(date: Date): string {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}

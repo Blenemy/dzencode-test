@@ -1,8 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { AddButton } from '@/components/buttons/AddButton';
+import { useDialog } from '@/components/dialog/use-dialog';
 import { Pagination } from '@/components/pagination/Pagination';
 import { useErrorMessage } from '@/lib/use-messages';
 import { ProductFilters } from './ProductFilters';
@@ -17,12 +20,18 @@ import { ProductsTable } from './ProductsTable';
 import { saveProductFilters } from './saved-filters';
 import './products-page.scss';
 
+const CreateProductDialog = dynamic(
+  () => import('./CreateProductDialog').then((module) => module.CreateProductDialog),
+  { ssr: false },
+);
+
 const SKELETON_ROWS = 5;
 
 export function ProductsView({ initial }: { initial: ProductsPageData }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const productDialog = useDialog();
   const args = useMemo(() => parseProductsArgs(searchParams), [searchParams]);
   useHydrateProductsPage(args, initial);
   const t = useTranslations('products');
@@ -63,6 +72,7 @@ export function ProductsView({ initial }: { initial: ProductsPageData }) {
   return (
     <section className="products" aria-labelledby="products-title">
       <header className="products__header">
+        <AddButton label={t('create')} onClick={productDialog.open} />
         <h1 id="products-title" className="products__title">
           {t('title')} <span className="products__total">/ {data ? data.total : '…'}</span>
         </h1>
@@ -118,6 +128,15 @@ export function ProductsView({ initial }: { initial: ProductsPageData }) {
         hrefFor={(page) => hrefFor({ ...args, page })}
         onChange={changePage}
       />
+
+      {productDialog.mounted && (
+        <CreateProductDialog
+          show={productDialog.show}
+          onHide={productDialog.close}
+          onExited={productDialog.exited}
+          onCreated={productDialog.close}
+        />
+      )}
     </section>
   );
 }
