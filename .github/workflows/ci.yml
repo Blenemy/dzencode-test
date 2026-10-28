@@ -33,6 +33,9 @@ jobs:
       - name: Типы
         run: npm run typecheck
 
+      - name: Unit-тесты web
+        run: npm run test:web
+
       - name: Сборка
         run: npm run build
 
@@ -74,3 +77,44 @@ jobs:
 
       - name: Тесты api
         run: npm run test:api
+
+  e2e:
+    name: E2E (Playwright)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Поднять стек в Docker
+        run: |
+          cp .env.example .env
+          docker compose up -d --build --wait
+
+      - name: Установить Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Прогнать e2e
+        run: npm run test:e2e
+
+      - name: Логи стека
+        if: failure()
+        run: docker compose logs --tail 100
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            e2e/playwright-report
+            e2e/test-results
+          retention-days: 7
