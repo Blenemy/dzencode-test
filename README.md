@@ -4,17 +4,75 @@
 
 **Прод:** https://dzen.topchyidev.shop
 
-> Проект в разработке. Полное описание функций, архитектуры и соответствия пунктам ТЗ
-> появится в этом файле по мере готовности.
+Ниже — что из ТЗ где реализовано, затем запуск, устройство фронтенда и API, тесты и деплой.
+
+## Соответствие ТЗ
+
+### Обязательная часть
+
+| Пункт ТЗ                                                                 | Реализация                                                                                                                         |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Глобальное состояние, Redux                                              | Redux Toolkit + RTK Query: слайсы `auth`, `sessions`, `deletion`, `preferences` и кеш запросов                                     |
+| Компонентный подход, React последней версии                              | React 19; компоненты по фичам в `apps/web/src/features`, общие — в `apps/web/src/components`                                       |
+| Роутинг, отдельные страницы                                              | Next.js App Router: приходы, продукты, группы, пользователи, настройки, вход и регистрация                                         |
+| Анимации при смене роутов и компонентов                                  | motion: смена разделов (`template.tsx`), панель прихода, попапы, строки списков, подчёркивание в меню                              |
+| ES6+                                                                     | весь код на TypeScript (`strict`)                                                                                                  |
+| Navigation Menu                                                          | `NavigationMenu`: аватар с переходом в настройки и ссылки на разделы, на телефонах — выезжающая панель                             |
+| TopMenu: дата и время в реальном времени, счётчик сессий через Socket.io | `LiveClock` (без расхождений при гидрации) и `SessionsBadge` с числом открытых вкладок                                             |
+| Приход открывается рядом со списком и закрывается                        | `/orders/:id` и панель `OrderDetailsPanel`, ссылку на приход можно открыть сразу                                                   |
+| Название, число продуктов, дата в двух форматах, сумма в двух валютах    | `OrderRow`: «04 / 12» и «06 / Апр / 2017», суммы в USD и UAH                                                                       |
+| Удаление прихода через попап                                             | `DeleteDialog` со списком продуктов, которые удалятся вместе с приходом                                                            |
+| Все продукты и фильтр по типу                                            | `/products`: фильтры «Тип» и «Спецификация» хранятся в URL, вывод по страницам                                                     |
+| Поля продукта                                                            | название, SN, фото, статус, гарантия «с … по …», новый / Б/У, цены в USD и UAH, группа, пользователь, приход, дата в двух форматах |
+| Вёрстка по макету, БЭМ, Bootstrap                                        | Bootstrap 5 из SCSS, блоки по БЭМ, десктопная и мобильная версии                                                                   |
+| REST (Fetch)                                                             | RTK Query поверх `fetch`, Swagger на `/api/docs`                                                                                   |
+| Формы с валидацией                                                       | react-hook-form + zod, схемы общие с сервером: вход, регистрация, приход, продукт, профиль                                         |
+| WebSocket                                                                | Socket.io: счётчик вкладок и доменные события в реальном времени                                                                   |
+| Git                                                                      | ветка на каждый этап (`feature/*`), PR с merge-коммитом                                                                            |
+| Docker                                                                   | `docker compose up --build` поднимает MySQL, миграции, api, web и nginx-шлюз                                                       |
+| Развёртывание                                                            | https://dzen.topchyidev.shop, GitHub Actions → GHCR → VPS                                                                          |
+| Файл схемы БД для MySQL Workbench                                        | `db/inventory.mwb` и `db/schema.sql`, см. «Схема для MySQL Workbench»                                                              |
+
+### Junior+
+
+| Пункт         | Реализация                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| TypeScript    | все пакеты, `strict` и `noUncheckedIndexedAccess`                                             |
+| SSR (Next.js) | данные страниц рендерятся на сервере и попадают в кеш RTK Query без повторного запроса        |
+| Unit-тесты    | Vitest: поиск и сборка CSV                                                                    |
+| i18n          | next-intl: русский по умолчанию, английский под `/en`                                         |
+| JWT           | access и refresh в httpOnly-куках, ротация refresh и обнаружение его повторного использования |
+| Web Storage   | localStorage: валюта, анимации, фильтры продуктов; sessionStorage: ID вкладки                 |
+| Lazy Loading  | `next/dynamic` для попапов, форм, графиков и карты; worker'ы создаются по требованию          |
+| Charts        | recharts на странице «Группы»                                                                 |
+| Maps          | react-leaflet и OpenStreetMap на странице «Пользователи»                                      |
+
+### Middle
+
+| Пункт                                 | Реализация                                                                                    |
+| ------------------------------------- | --------------------------------------------------------------------------------------------- |
+| GraphQL                               | не используется: API — REST и Socket.io (почему — ниже)                                       |
+| Web Workers                           | нечёткий поиск в шапке и сборка CSV                                                           |
+| PWA                                   | манифест, иконки, свой service worker, офлайн-страница                                        |
+| Event-Driven Architecture             | шина доменных событий на сервере; на клиенте Socket.io → Redux-экшены → инвалидация кеша      |
+| FrontEnd Optimization                 | Bootstrap по частям, ленивая загрузка, `next/font`, gzip и `immutable`-кеш, Lighthouse 96–100 |
+| Task Runners (npm scripts)            | корневые скрипты `dev`, `build`, `lint`, `typecheck`, `test:*`, `db:*`, `analyze`             |
+| Интеграционные и функциональные тесты | Vitest + supertest против настоящей MySQL, Playwright против стека в Docker                   |
+
+GraphQL не используется сознательно. Данные приложения — несколько плоских ресурсов с фильтрами, а
+обновления в реальном времени уже идут через Socket.io. GraphQL добавил бы вторую схему API и слой
+резолверов без выигрыша для этих экранов, поэтому API — REST с OpenAPI-документацией и общими
+zod-схемами для клиента и сервера.
 
 ## Стек
 
-| Часть          | Технологии                                                                                                                                                          |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| web            | Next.js 16 (App Router, SSR), React 19, TypeScript, Redux Toolkit + RTK Query, next-intl, Bootstrap 5 (SCSS) + BEM, motion, react-hook-form + zod, socket.io-client |
-| api            | Express 5, Prisma 7, MySQL 8.4, TypeScript                                                                                                                          |
-| общий код      | `packages/shared`: схемы валидации, типы DTO, форматтеры                                                                                                            |
-| инфраструктура | Docker Compose, nginx-шлюз, GitHub Actions → GHCR → VPS                                                                                                             |
+| Часть          | Технологии                                                                                                                                                                                   |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| web            | Next.js 16 (App Router, SSR), React 19, TypeScript, Redux Toolkit + RTK Query, next-intl, Bootstrap 5 (SCSS) + BEM, motion, react-hook-form + zod, socket.io-client, recharts, react-leaflet |
+| тесты          | Vitest, supertest, Playwright                                                                                                                                                                |
+| api            | Express 5, Prisma 7, MySQL 8.4, TypeScript                                                                                                                                                   |
+| общий код      | `packages/shared`: схемы валидации, типы DTO, форматтеры                                                                                                                                     |
+| инфраструктура | Docker Compose, nginx-шлюз, GitHub Actions → GHCR → VPS                                                                                                                                      |
 
 ## Быстрый старт (Docker)
 
@@ -241,6 +299,24 @@ REST под `/api`, полная спецификация — в Swagger на `/
 содержимому, а не по расширению, допускаются JPEG, PNG и WebP. Файлы лежат в volume `uploads`,
 их отдаёт nginx-шлюз с долгим кешем.
 
+### Схема для MySQL Workbench
+
+- `db/inventory.mwb` — модель MySQL Workbench (File → Open Model): 8 таблиц, индексы, внешние
+  ключи с правилами удаления и EER-диаграмма со связями.
+- `db/schema.sql` — та же схема в SQL: создаёт базу `inventory` и все таблицы. Её можно выполнить в
+  Workbench или в `mysql`.
+
+Оба файла собираются из Prisma-схемы и совпадают с тем, что создают миграции:
+
+```bash
+npm run db:docs
+```
+
+`db/scripts/export-schema.ts` получает DDL через `prisma migrate diff`, разбирает его и пишет
+документ модели Workbench (XML в zip) без сторонних зависимостей. Модель проверена в
+MySQL Workbench 8.0.47, `schema.sql` — на MySQL 8.4. Если новый Workbench 26.x на базе MySQL Shell
+не откроет `.mwb`, подойдёт `schema.sql`.
+
 ### События (EDA)
 
 Сервисы не знают, кто реагирует на изменения: после записи они публикуют доменное событие в
@@ -328,23 +404,24 @@ Chromium можно взять установленный браузер: `E2E_B
 
 ## Скрипты
 
-| Команда                       | Что делает                            |
-| ----------------------------- | ------------------------------------- |
-| `npm run dev`                 | MySQL + api + web в режиме разработки |
-| `npm run build`               | сборка shared, api и web              |
-| `npm run lint`                | ESLint по всем пакетам                |
-| `npm run typecheck`           | проверка типов во всех пакетах        |
-| `npm run format`              | Prettier                              |
-| `npm run test`                | unit- и интеграционные тесты          |
-| `npm run test:api`            | интеграционные тесты api              |
-| `npm run test:web`            | unit-тесты web                        |
-| `npm run test:e2e`            | функциональные тесты Playwright       |
-| `npm run db:migrate`          | создать миграцию по изменениям схемы  |
-| `npm run db:apply`            | применить миграции к базе разработки  |
-| `npm run db:seed`             | демо-пользователь и демо-данные       |
-| `npm run docker:up`           | весь стек в Docker                    |
-| `npm run analyze`             | анализ бандла web (`next analyze`)    |
-| `npm run styles -w @dzen/web` | пересобрать тему Bootstrap            |
+| Команда                       | Что делает                                       |
+| ----------------------------- | ------------------------------------------------ |
+| `npm run dev`                 | MySQL + api + web в режиме разработки            |
+| `npm run build`               | сборка shared, api и web                         |
+| `npm run lint`                | ESLint по всем пакетам                           |
+| `npm run typecheck`           | проверка типов во всех пакетах                   |
+| `npm run format`              | Prettier                                         |
+| `npm run test`                | unit- и интеграционные тесты                     |
+| `npm run test:api`            | интеграционные тесты api                         |
+| `npm run test:web`            | unit-тесты web                                   |
+| `npm run test:e2e`            | функциональные тесты Playwright                  |
+| `npm run db:migrate`          | создать миграцию по изменениям схемы             |
+| `npm run db:apply`            | применить миграции к базе разработки             |
+| `npm run db:seed`             | демо-пользователь и демо-данные                  |
+| `npm run db:docs`             | пересобрать `db/schema.sql` и `db/inventory.mwb` |
+| `npm run docker:up`           | весь стек в Docker                               |
+| `npm run analyze`             | анализ бандла web (`next analyze`)               |
+| `npm run styles -w @dzen/web` | пересобрать тему Bootstrap                       |
 
 ## Деплой
 
@@ -380,6 +457,7 @@ apps/api         REST API (Express + Prisma)
 apps/web         фронтенд (Next.js)
 packages/shared  общий код api и web
 e2e              функциональные тесты Playwright
+db               схема БД для MySQL Workbench и скрипт её сборки
 docker/gateway   nginx: единая точка входа в стек
 docker/mysql     init-скрипт MySQL: теневая и тестовая базы
 deploy           конфиг nginx хоста
