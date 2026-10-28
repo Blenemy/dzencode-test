@@ -23,7 +23,7 @@ export function RealtimeBridge() {
   useEffect(() => {
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       process.env.NEXT_PUBLIC_SOCKET_URL || undefined,
-      { path: SOCKET_PATH, withCredentials: true },
+      { path: SOCKET_PATH, withCredentials: true, transports: ['websocket'] },
     );
 
     socket.on(SocketEvent.SessionsCount, ({ count }) => dispatch(sessionsCounted(count)));
