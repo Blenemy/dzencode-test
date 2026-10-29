@@ -196,6 +196,12 @@
       width: var(--nav-width);
       background: var(--surface);
       box-shadow: 6px 0 22px rgba(61, 75, 85, 0.08);
+
+      // Bootstrap resets .offcanvas-lg .offcanvas-body padding to 0 on this breakpoint.
+      .nav-menu__body {
+        padding: 2.5rem 0 2rem;
+        overflow-y: auto;
+      }
     }
   }
 
