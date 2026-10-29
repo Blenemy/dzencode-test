@@ -17,7 +17,7 @@
     "predev": "docker compose up -d --wait mysql && npm run build -w @dzen/shared",
     "dev": "concurrently -n shared,api,web -c gray,cyan,magenta -k \"npm run dev -w @dzen/shared\" \"npm run dev -w @dzen/api\" \"npm run dev -w @dzen/web\"",
     "build": "npm run build --workspaces --if-present",
-    "typecheck": "npm run build -w @dzen/shared && npm run typecheck --workspaces --if-present",
+    "typecheck": "npm run build -w @dzen/shared && npm run typecheck --workspaces --if-present && tsc -p db",
     "lint": "eslint . && npm run lint -w @dzen/web",
     "analyze": "npm run analyze -w @dzen/web",
     "format": "prettier --write .",
@@ -31,6 +31,7 @@
     "db:deploy": "npm run db:deploy -w @dzen/api",
     "db:seed": "npm run db:seed -w @dzen/api",
     "db:studio": "npm run db:studio -w @dzen/api",
+    "db:docs": "tsx db/scripts/export-schema.ts",
     "docker:up": "docker compose up -d --build",
     "docker:down": "docker compose down"
   },
