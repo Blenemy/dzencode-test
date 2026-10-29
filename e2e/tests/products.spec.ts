@@ -11,6 +11,9 @@ test('фильтр по типу хранится в адресе и переж�
   await expect.poll(() => readTotal(page)).toBeLessThan(all);
   const monitors = await readTotal(page);
   expect(monitors).toBeGreaterThan(0);
+  for (const row of await page.locator('tbody tr').all()) {
+    await expect(row).toContainText('Мониторы');
+  }
 
   const specification = page.getByLabel('Спецификация');
   const option = specification.locator('option').nth(1);

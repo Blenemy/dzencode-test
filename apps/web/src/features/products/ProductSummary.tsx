@@ -1,13 +1,15 @@
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import type { ProductDto } from '@dzen/shared';
+import { useProductTypeName } from '@/features/catalog/use-type-name';
 import { cx } from '@/lib/cx';
 import './products.scss';
 
-type ProductSummaryData = Pick<ProductDto, 'title' | 'serialNumber' | 'photo' | 'status'>;
+type ProductSummaryData = Pick<ProductDto, 'title' | 'serialNumber' | 'photo' | 'status' | 'type'>;
 
 export function ProductSummary({ product }: { product: ProductSummaryData }) {
   const t = useTranslations('products');
+  const typeName = useProductTypeName();
   const status = t(`status.${product.status}`);
 
   return (
@@ -29,7 +31,10 @@ export function ProductSummary({ product }: { product: ProductSummaryData }) {
       )}
       <span className="product-summary__info">
         <span className="product-summary__title">{product.title}</span>
-        <span className="product-summary__serial">{product.serialNumber}</span>
+        <span className="product-summary__meta">
+          <span className="product-summary__serial">{product.serialNumber}</span>
+          <span className="product-summary__type">{typeName(product.type.name)}</span>
+        </span>
       </span>
     </div>
   );
