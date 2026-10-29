@@ -10,7 +10,8 @@
   "workspaces": [
     "packages/shared",
     "apps/api",
-    "apps/web"
+    "apps/web",
+    "e2e"
   ],
   "scripts": {
     "predev": "docker compose up -d --wait mysql && npm run build -w @dzen/shared",
@@ -23,6 +24,8 @@
     "format:check": "prettier --check .",
     "test": "npm run test --workspaces --if-present",
     "test:api": "npm run test -w @dzen/api",
+    "test:web": "npm run test -w @dzen/web",
+    "test:e2e": "npm run e2e -w @dzen/e2e",
     "db:migrate": "npm run db:migrate -w @dzen/api",
     "db:apply": "npm run db:apply -w @dzen/api",
     "db:deploy": "npm run db:deploy -w @dzen/api",

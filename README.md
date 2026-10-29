@@ -283,8 +283,11 @@ REST под `/api`, полная спецификация — в Swagger на `/
 
 ## Тесты
 
-Интеграционные тесты api работают с настоящей MySQL: база `inventory_test` создаётся при первом
-запуске контейнера MySQL, миграции к ней применяются перед прогоном.
+Тестов немного: они закрывают ключевые сценарии, а не каждую строчку.
+
+**Интеграционные тесты api** работают с настоящей MySQL: база `inventory_test` создаётся при первом
+запуске контейнера MySQL, миграции к ней применяются перед прогоном. Другая база задаётся через
+`TEST_DATABASE_URL`.
 
 ```bash
 docker compose up -d --wait mysql
@@ -292,8 +295,36 @@ npm run build -w @dzen/shared
 npm run test:api
 ```
 
-Другая база задаётся через `TEST_DATABASE_URL`. В CI тесты идут на каждый PR с MySQL в
-сервис-контейнере.
+**Unit-тесты web** (Vitest) проверяют нечёткий поиск (ранжирование, «ё», совпадение по
+подпоследовательности) и сборку CSV (разделители по языку, экранирование, защита от формул).
+
+```bash
+npm run test:web
+```
+
+**Функциональные тесты** (Playwright) идут против стека в Docker:
+
+- демо-вход, возврат на запрошенную страницу, выход;
+- переходы по разделам, смена языка RU/EN без потери страницы;
+- панель прихода открывается рядом со списком и закрывается;
+- ошибки валидации в форме прихода;
+- новый приход появляется в соседней вкладке, удаляется через попап и пропадает в обеих;
+- фильтры продуктов живут в адресе и переживают перезагрузку;
+- счётчик вкладок растёт со второй вкладкой и падает после её закрытия.
+
+```bash
+docker compose up -d --build --wait
+npx playwright install chromium
+npm run test:e2e
+```
+
+Адрес стека задаётся через `E2E_BASE_URL` (по умолчанию `http://localhost:8080`). Вместо скачанного
+Chromium можно взять установленный браузер: `E2E_BROWSER_CHANNEL=msedge` или `chrome`. Тесты сами
+создают и удаляют свой приход, демо-данные не меняются. Отчёт лежит в `e2e/playwright-report`.
+
+В CI на каждый PR идут линтер, типы, unit-тесты web, интеграционные тесты api с MySQL в
+сервис-контейнере и e2e против `docker compose up --build`. Если e2e падают, отчёт Playwright
+прикладывается к запуску.
 
 ## Скрипты
 
@@ -304,8 +335,10 @@ npm run test:api
 | `npm run lint`                | ESLint по всем пакетам                |
 | `npm run typecheck`           | проверка типов во всех пакетах        |
 | `npm run format`              | Prettier                              |
-| `npm run test`                | все тесты                             |
+| `npm run test`                | unit- и интеграционные тесты          |
 | `npm run test:api`            | интеграционные тесты api              |
+| `npm run test:web`            | unit-тесты web                        |
+| `npm run test:e2e`            | функциональные тесты Playwright       |
 | `npm run db:migrate`          | создать миграцию по изменениям схемы  |
 | `npm run db:apply`            | применить миграции к базе разработки  |
 | `npm run db:seed`             | демо-пользователь и демо-данные       |
@@ -317,7 +350,7 @@ npm run test:api
 
 Push в `main` запускает `.github/workflows/deploy.yml`:
 
-1. те же проверки, что и на PR (`ci.yml`);
+1. проверки из `ci.yml`, кроме e2e: они уже прошли на PR;
 2. сборка образов api и web и публикация в GHCR (сборка Next идёт в CI, а не на сервере, где живёт
    ещё один прод);
 3. на сервере `git reset --hard origin/main`, `docker compose pull` и `up -d --no-build`;
@@ -346,6 +379,7 @@ sudo certbot --nginx -d dzen.topchyidev.shop
 apps/api         REST API (Express + Prisma)
 apps/web         фронтенд (Next.js)
 packages/shared  общий код api и web
+e2e              функциональные тесты Playwright
 docker/gateway   nginx: единая точка входа в стек
 docker/mysql     init-скрипт MySQL: теневая и тестовая базы
 deploy           конфиг nginx хоста
