@@ -1,4 +1,4 @@
-const VERSION = 'v1';
+const VERSION = 'v2';
 const STATIC_CACHE = `inventory-static-${VERSION}`;
 const OFFLINE_URL = '/offline.html';
 const PRECACHE = [OFFLINE_URL, '/icons/icon-192.png'];
@@ -56,6 +56,10 @@ async function networkOrOffline(request) {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
+  // Turbopack starts every worker from one bootstrap URL and passes its chunks in the
+  // #params fragment; answering it from the service worker hands later workers the
+  // fragment of the first one, so they run the wrong code.
+  if (request.destination === 'worker' || request.destination === 'sharedworker') return;
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
