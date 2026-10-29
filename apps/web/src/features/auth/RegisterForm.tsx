@@ -54,12 +54,16 @@ export function RegisterForm({ next }: { next: string }) {
           </div>
         )}
         <FormField
+          className="mb-2"
+          reserveMessage
           label={t('name')}
           autoComplete="name"
           registration={form.register('name')}
           error={errors.name}
         />
         <FormField
+          className="mb-2"
+          reserveMessage
           label={t('email')}
           type="email"
           autoComplete="email"
@@ -67,6 +71,8 @@ export function RegisterForm({ next }: { next: string }) {
           error={errors.email}
         />
         <FormField
+          className="mb-2"
+          reserveMessage
           label={t('password')}
           type="password"
           autoComplete="new-password"

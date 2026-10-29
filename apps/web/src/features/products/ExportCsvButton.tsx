@@ -51,7 +51,12 @@ function download(text: string, filename: string): void {
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export function ExportCsvButton({ filters }: { filters: ProductFilters }) {
+interface ExportCsvButtonProps {
+  filters: ProductFilters;
+  disabled?: boolean;
+}
+
+export function ExportCsvButton({ filters, disabled = false }: ExportCsvButtonProps) {
   const t = useTranslations('products');
   const locale = useLocale();
   const typeName = useProductTypeName();
@@ -92,7 +97,7 @@ export function ExportCsvButton({ filters }: { filters: ProductFilters }) {
         type="button"
         className="btn btn-sm btn-outline-primary products__export-button"
         onClick={exportCsv}
-        disabled={busy}
+        disabled={busy || disabled}
         aria-busy={busy}
       >
         {busy ? (

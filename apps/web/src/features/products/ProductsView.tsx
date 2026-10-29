@@ -78,7 +78,10 @@ export function ProductsView({ initial }: { initial: ProductsPageData }) {
           {t('title')} <span className="products__total">/ {data ? data.total : '…'}</span>
         </h1>
         <ProductFilters args={args} onChange={navigate} />
-        <ExportCsvButton filters={{ typeId: args.typeId, specification: args.specification }} />
+        <ExportCsvButton
+          filters={{ typeId: args.typeId, specification: args.specification }}
+          disabled={!data || data.total === 0}
+        />
       </header>
 
       {isLoading && (

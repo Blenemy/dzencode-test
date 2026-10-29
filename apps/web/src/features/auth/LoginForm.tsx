@@ -65,6 +65,8 @@ export function LoginForm({ next, demo }: LoginFormProps) {
           </div>
         )}
         <FormField
+          className="mb-2"
+          reserveMessage
           label={t('email')}
           type="email"
           autoComplete="email"
@@ -72,6 +74,8 @@ export function LoginForm({ next, demo }: LoginFormProps) {
           error={errors.email}
         />
         <FormField
+          className="mb-2"
+          reserveMessage
           label={t('password')}
           type="password"
           autoComplete="current-password"

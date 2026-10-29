@@ -10,6 +10,7 @@ interface FormFieldProps extends Omit<
   registration: UseFormRegisterReturn;
   error?: FieldMessage;
   className?: string;
+  reserveMessage?: boolean;
 }
 
 export function FormField({
@@ -17,10 +18,11 @@ export function FormField({
   registration,
   error,
   className = 'mb-3',
+  reserveMessage,
   ...inputProps
 }: FormFieldProps) {
   return (
-    <Field label={label} error={error} className={className}>
+    <Field label={label} error={error} className={className} reserveMessage={reserveMessage}>
       {(control) => <input {...controlProps(control)} {...inputProps} {...registration} />}
     </Field>
   );

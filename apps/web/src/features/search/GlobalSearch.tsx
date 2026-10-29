@@ -22,6 +22,7 @@ export function GlobalSearch({ className }: { className?: string }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResults | null>(null);
   const [highlight, setHighlight] = useState(0);
+  const [workerFailed, setWorkerFailed] = useState(false);
   const { data: documents, isError } = useSearchDocumentsQuery(undefined, { skip: !activated });
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export function GlobalSearch({ className }: { className?: string }) {
     worker.onmessage = (event: MessageEvent<SearchResponse>) => {
       if (event.data.id === requestRef.current) setResults(event.data.results);
     };
+    worker.onerror = () => setWorkerFailed(true);
     workerRef.current = worker;
     return () => {
       worker.terminate();
@@ -58,13 +60,14 @@ export function GlobalSearch({ className }: { className?: string }) {
   const shown = term ? results : null;
   const options: SearchResult[] = shown ? [...shown.orders, ...shown.products] : [];
   const expanded = open && term.length > 0;
-  const status = isError
-    ? t('failed')
-    : !documents
-      ? t('preparing')
-      : shown && options.length === 0
-        ? t('empty')
-        : null;
+  const status =
+    isError || workerFailed
+      ? t('failed')
+      : !documents
+        ? t('preparing')
+        : shown && options.length === 0
+          ? t('empty')
+          : null;
   const optionId = (index: number) => `${listId}-option-${index}`;
 
   const choose = (option: SearchResult) => {
