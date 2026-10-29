@@ -1,6 +1,7 @@
 'use client';
 
 import { useId, type ReactNode } from 'react';
+import { cx } from '@/lib/cx';
 import { useValidationMessage } from '@/lib/use-messages';
 import './form.scss';
 
@@ -18,10 +19,11 @@ interface FieldProps {
   label: string;
   error?: FieldMessage;
   className?: string;
+  reserveMessage?: boolean;
   children: (control: FieldControl) => ReactNode;
 }
 
-export function Field({ label, error, className, children }: FieldProps) {
+export function Field({ label, error, className, reserveMessage = false, children }: FieldProps) {
   const id = useId();
   const message = useValidationMessage();
   const errorId = `${id}-error`;
@@ -32,9 +34,15 @@ export function Field({ label, error, className, children }: FieldProps) {
         {label}
       </label>
       {children({ id, invalid: Boolean(error), describedBy: error ? errorId : undefined })}
-      {error && (
-        <div id={errorId} className="invalid-feedback d-block">
-          {message(error.message)}
+      {(error || reserveMessage) && (
+        <div
+          id={errorId}
+          className={cx(
+            'invalid-feedback d-block',
+            reserveMessage && 'form-field__message--reserved',
+          )}
+        >
+          {error && message(error.message)}
         </div>
       )}
     </div>
