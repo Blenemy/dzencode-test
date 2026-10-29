@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { AuthCookie } from '@dzen/shared';
 import { routing } from './i18n/routing';
@@ -35,7 +35,16 @@ export default function proxy(request: NextRequest) {
     return NextResponse.redirect(login);
   }
 
-  return handleI18n(request);
+  return handleI18n(withoutBrowserLanguage(request));
+}
+
+// Unprefixed URLs stay Russian unless the user picked another language (the NEXT_LOCALE
+// cookie); the browser language alone must not redirect them to /en.
+function withoutBrowserLanguage(request: NextRequest): NextRequest {
+  if (!request.headers.has('accept-language')) return request;
+  const headers = new Headers(request.headers);
+  headers.delete('accept-language');
+  return new NextRequest(request, { headers });
 }
 
 export const config = {
